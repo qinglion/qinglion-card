@@ -34,11 +34,12 @@ export default class extends Controller<HTMLElement> {
     const url = window.location.href.split('#')[0]
 
     try {
-      // Get signature from external API
-      const response = await fetch('https://www.qinglion.com/api/v1/wechat_signatures', {
+      // Get signature from internal API
+      const response = await fetch('/wechat_signatures', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': this.getCsrfToken()
         },
         body: JSON.stringify({ url: url })
       })
