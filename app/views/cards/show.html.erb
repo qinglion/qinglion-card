@@ -75,188 +75,29 @@
 
   <!-- Main Content -->
   <div class="container-xl mx-auto px-4 py-12">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Left Column: Profile Details -->
-      <div class="lg:col-span-2 space-y-8">
-        <!-- About Section -->
-        <% if @profile.bio.present? %>
-          <div class="card">
-            <div class="card-header">
-              <h2 class="text-2xl font-bold text-primary">个人简介</h2>
-            </div>
-            <div class="card-body">
-              <div class="text-secondary leading-relaxed prose max-w-none">
-                <%= simple_format(@profile.bio) %>
-              </div>
-            </div>
+    <% if @profile.bio.present? %>
+      <!-- About Me Section -->
+      <div class="card overflow-hidden mb-8">
+        <div class="card-header">
+          <h2 class="text-2xl font-bold text-primary">关于我</h2>
+        </div>
+        
+        <% if @profile.background_image.attached? %>
+          <!-- Image Grid Layout (reference style) -->
+          <div class="aspect-w-16 aspect-h-9 bg-surface-elevated">
+            <%= image_tag @profile.background_image, 
+                class: 'w-full h-full object-cover',
+                alt: "关于#{@profile.full_name}" %>
           </div>
         <% end %>
-
-        <!-- Cases Section -->
-        <% if @case_studies.any? %>
-          <div class="card">
-            <div class="card-header">
-              <h2 class="text-2xl font-bold text-primary">典型案例</h2>
-            </div>
-            <div class="card-body space-y-6">
-              <% @case_studies.each do |case_study| %>
-                <div class="border-l-4 border-primary pl-4">
-                  <h3 class="text-lg font-semibold text-primary mb-2"><%= case_study.title %></h3>
-                  <% if case_study.category.present? || case_study.date.present? %>
-                    <p class="text-secondary text-sm mb-2">
-                      <% if case_study.date.present? %><%= case_study.date %><% end %>
-                      <% if case_study.category.present? && case_study.date.present? %> · <% end %>
-                      <% if case_study.category.present? %><%= case_study.category %><% end %>
-                    </p>
-                  <% end %>
-                  <p class="text-secondary leading-relaxed"><%= case_study.description %></p>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-
-        <!-- Honors Section -->
-        <% if @honors.any? %>
-          <div class="card">
-            <div class="card-header">
-              <h2 class="text-2xl font-bold text-primary">荣誉资质</h2>
-            </div>
-            <div class="card-body">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <% @honors.each do |honor| %>
-                  <div class="flex items-start gap-3 p-4 bg-surface-elevated rounded-lg border border-border">
-                    <div class="icon-container icon-container-md flex-shrink-0">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <h4 class="font-semibold text-primary mb-1"><%= honor.title %></h4>
-                      <p class="text-sm text-muted">
-                        <%= honor.organization %><% if honor.date.present? %> · <%= honor.date %><% end %>
-                      </p>
-                      <% if honor.description.present? %>
-                        <p class="text-sm text-secondary mt-2"><%= honor.description %></p>
-                      <% end %>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <!-- Right Column: Contact Form -->
-      <div class="lg:col-span-1">
-        <div class="card sticky top-4">
-          <div class="card-header bg-gradient-to-r from-primary to-primary-dark">
-            <h2 class="text-xl font-bold text-white">联系我</h2>
-            <p class="text-white/80 text-sm mt-1">有任何问题请留言</p>
-          </div>
-          
-          <div class="card-body">
-            <form class="space-y-4">
-              <div>
-                <label class="form-label">姓名</label>
-                <input 
-                  type="text" 
-                  placeholder="请输入您的姓名"
-                  class="form-input"
-                  required>
-              </div>
-              
-              <div>
-                <label class="form-label">联系方式</label>
-                <input 
-                  type="text" 
-                  placeholder="手机或微信"
-                  class="form-input"
-                  required>
-              </div>
-              
-              <div>
-                <label class="form-label">留言内容</label>
-                <textarea 
-                  placeholder="请描述您的问题或需求..."
-                  class="form-input"
-                  rows="4"
-                  required></textarea>
-              </div>
-              
-              <button type="submit" class="btn-primary w-full">
-                提交留言
-              </button>
-            </form>
-            
-            <div class="mt-6 pt-6 border-t border-border">
-              <h3 class="font-semibold text-on-surface mb-3">其他联系方式</h3>
-              <div class="space-y-2">
-                <% if @profile.phone.present? %>
-                  <a href="tel:<%= @profile.phone %>" class="flex items-center gap-2 text-secondary hover:text-primary transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                    </svg>
-                    <%= @profile.phone %>
-                  </a>
-                <% end %>
-                
-                <% if @profile.email.present? %>
-                  <a href="mailto:<%= @profile.email %>" class="flex items-center gap-2 text-secondary hover:text-primary transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                    <%= @profile.email %>
-                  </a>
-                <% end %>
-              </div>
-            </div>
+        
+        <div class="card-body">
+          <div class="prose max-w-none text-secondary leading-relaxed">
+            <%= simple_format(@profile.bio) %>
           </div>
         </div>
-
-        <!-- Stats Card -->
-        <% if @profile.stats.present? && @profile.stats.values.any? { |v| v.to_i > 0 } %>
-          <div class="card mt-6">
-            <div class="card-body">
-              <h3 class="font-semibold text-primary mb-4">专业数据</h3>
-              <div class="space-y-4">
-                <% if @profile.stats['years_experience'].to_i > 0 %>
-                  <div class="flex items-center justify-between">
-                    <span class="text-secondary">执业年限</span>
-                    <span class="font-bold text-2xl text-primary"><%= @profile.stats['years_experience'] %>年</span>
-                  </div>
-                  <div class="section-divider my-2"></div>
-                <% end %>
-                
-                <% if @profile.stats['cases_handled'].to_i > 0 %>
-                  <div class="flex items-center justify-between">
-                    <span class="text-secondary">成功案例</span>
-                    <span class="font-bold text-2xl text-primary"><%= @profile.stats['cases_handled'] %>+</span>
-                  </div>
-                  <div class="section-divider my-2"></div>
-                <% end %>
-                
-                <% if @profile.stats['clients_served'].to_i > 0 %>
-                  <div class="flex items-center justify-between">
-                    <span class="text-secondary">服务客户</span>
-                    <span class="font-bold text-2xl text-primary"><%= @profile.stats['clients_served'] %>+</span>
-                  </div>
-                  <div class="section-divider my-2"></div>
-                <% end %>
-                
-                <% if @profile.stats['success_rate'].to_i > 0 %>
-                  <div class="flex items-center justify-between">
-                    <span class="text-secondary">成功率</span>
-                    <span class="font-bold text-2xl text-success"><%= @profile.stats['success_rate'] %>%</span>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        <% end %>
       </div>
-    </div>
+    <% end %>
   </div>
 
   <!-- Bottom Navigation -->
@@ -270,14 +111,14 @@
           <span class="text-xs mt-1 text-gray-600 dark:text-gray-400">首页</span>
         <% end %>
         
-        <%= link_to teams_path, class: "flex flex-col items-center justify-center flex-1 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
+        <%= link_to teams_path(referrer: card_path(@profile.slug)), class: "flex flex-col items-center justify-center flex-1 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
           <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
           </svg>
           <span class="text-xs mt-1 text-gray-600 dark:text-gray-400">团队</span>
         <% end %>
         
-        <%= link_to consultations_path, class: "flex flex-col items-center justify-center flex-1 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
+        <%= link_to consultations_path(referrer: card_path(@profile.slug)), class: "flex flex-col items-center justify-center flex-1 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
           <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
           </svg>
@@ -288,24 +129,5 @@
   </nav>
 
   <!-- Footer CTA -->
-  <section class="bg-surface-elevated py-12 mt-12 mb-20 border-t border-border">
-    <div class="container-lg mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold text-primary mb-4">需要专业服务？</h2>
-      <p class="text-secondary mb-6 max-w-2xl mx-auto">
-        <%= @profile.bio&.truncate(100) || "专业团队，为您提供全方位解决方案。" %>
-      </p>
-      <div class="flex gap-4 justify-center">
-        <% if @profile.phone.present? %>
-          <a href="tel:<%= @profile.phone %>" class="btn-primary btn-lg">
-            立即联系
-          </a>
-        <% end %>
-        <% if @profile.email.present? %>
-          <a href="mailto:<%= @profile.email %>" class="btn-outline btn-lg">
-            发送邮件
-          </a>
-        <% end %>
-      </div>
-    </div>
-  </section>
+  
 </div>

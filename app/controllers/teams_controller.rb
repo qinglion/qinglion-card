@@ -2,6 +2,7 @@ class TeamsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    @full_render = true  # Hide navbar for teams view
     @profile = current_user.profile
     @organization = @profile&.organization
 

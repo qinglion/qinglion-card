@@ -20,6 +20,13 @@ export default class extends Controller<HTMLElement> {
 
   connect(): void {
     console.log("WechatShare controller connected")
+    
+    // Skip WeChat share in development environment
+    if (this.isDevelopment()) {
+      console.log('Development environment detected, skipping WeChat share setup')
+      return
+    }
+    
     this.initWechatShare()
   }
 
@@ -68,14 +75,14 @@ export default class extends Controller<HTMLElement> {
 
   private configWechat(config: any): void {
     wx.config({
-      debug: true, // Use vConsole for debugging instead
+      debug: false, // Use vConsole for debugging instead
       appId: config.appId,
       timestamp: config.timestamp,
       nonceStr: config.nonceStr,
       signature: config.signature,
       jsApiList: [
         'updateAppMessageShareData',
-        'updateTimelineShareData',
+        'updateTimelineShareData'
       ]
     })
 
@@ -146,5 +153,15 @@ export default class extends Controller<HTMLElement> {
   private getCsrfToken(): string {
     const token = document.querySelector('meta[name="csrf-token"]')
     return token ? token.getAttribute('content') || '' : ''
+  }
+
+  private isDevelopment(): boolean {
+    // Check if running in development mode
+    // Development indicators: localhost, 127.0.0.1, or clackypaas.com domains
+    const hostname = window.location.hostname
+    return hostname === 'localhost' || 
+           hostname === '127.0.0.1' || 
+           hostname.includes('clackypaas.com') ||
+           hostname.includes('ngrok.io')
   }
 }

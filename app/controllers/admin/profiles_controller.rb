@@ -50,6 +50,6 @@ class Admin::ProfilesController < Admin::BaseController
   end
 
   def profile_params
-    params.require(:profile).permit(:full_name, :title, :company, :phone, :email, :location, :bio, :specializations, :avatar_url, :avatar, :department, :stats, :slug, :user_id)
+    params.require(:profile).permit(:full_name, :title, :company, :phone, :email, :location, :bio, :specializations, :avatar_url, :avatar, :background_image, :department, :stats, :slug, :user_id)
   end
 end
