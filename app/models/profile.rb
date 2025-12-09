@@ -3,12 +3,14 @@ class Profile < ApplicationRecord
   friendly_id :full_name, use: :slugged
 
   belongs_to :user
+  belongs_to :organization, optional: true
   has_many :case_studies, dependent: :destroy
   has_many :honors, dependent: :destroy
   has_many :chat_sessions, dependent: :destroy
   has_many :chat_messages, through: :chat_sessions
   
   has_one_attached :avatar
+  has_one_attached :background_image
 
   serialize :specializations, coder: JSON
 
@@ -17,6 +19,7 @@ class Profile < ApplicationRecord
   validates :slug, uniqueness: true, allow_blank: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   validates :phone, format: { with: /\A[0-9\-\(\)\+\s]+\z/ }, allow_blank: true
+  validates :status, inclusion: { in: %w[pending approved rejected] }
 
   # Default stats structure
   after_initialize :set_default_stats, if: :new_record?
@@ -52,5 +55,26 @@ class Profile < ApplicationRecord
       'brand_style' => nil,
       'contact_preferences' => nil
     }
+  end
+
+  # Organization status methods
+  def pending?
+    status == 'pending'
+  end
+
+  def approved?
+    status == 'approved'
+  end
+
+  def rejected?
+    status == 'rejected'
+  end
+
+  def approve!
+    update(status: 'approved')
+  end
+
+  def reject!
+    update(status: 'rejected')
   end
 end

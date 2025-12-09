@@ -1,0 +1,120 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-on-surface"><%= @organization.name %> - 成员管理</h1>
+    <%= link_to '返回', admin_organization_path(@organization), class: 'btn-secondary' %>
+  </div>
+
+  <!-- Pending Members -->
+  <div class="card mb-8">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold text-on-surface">待审核成员 (<%= @pending_profiles.total_count %>)</h2>
+    </div>
+    <div class="card-body">
+      <% if @pending_profiles.any? %>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left p-4 text-on-surface-variant">头像</th>
+                <th class="text-left p-4 text-on-surface-variant">姓名</th>
+                <th class="text-left p-4 text-on-surface-variant">职位</th>
+                <th class="text-left p-4 text-on-surface-variant">科室</th>
+                <th class="text-left p-4 text-on-surface-variant">邮箱</th>
+                <th class="text-left p-4 text-on-surface-variant">申请时间</th>
+                <th class="text-right p-4 text-on-surface-variant">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @pending_profiles.each do |profile| %>
+                <tr class="border-b border-border hover:bg-surface-variant/10">
+                  <td class="p-4">
+                    <% if profile.avatar.attached? %>
+                      <%= image_tag profile.avatar.variant(resize_to_limit: [50, 50]), class: 'w-12 h-12 rounded-full object-cover' %>
+                    <% else %>
+                      <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="text-primary font-semibold"><%= profile.full_name[0] %></span>
+                      </div>
+                    <% end %>
+                  </td>
+                  <td class="p-4 text-on-surface"><%= profile.full_name %></td>
+                  <td class="p-4 text-on-surface"><%= profile.title %></td>
+                  <td class="p-4 text-on-surface"><%= profile.department %></td>
+                  <td class="p-4 text-on-surface"><%= profile.email %></td>
+                  <td class="p-4 text-on-surface-variant"><%= profile.created_at.strftime('%Y-%m-%d') %></td>
+                  <td class="p-4 text-right">
+                    <div class="flex justify-end gap-2">
+                      <%= button_to '通过', admin_organization_approve_member_path(@organization, profile_id: profile.id), 
+                          method: :post, class: 'btn-primary btn-sm' %>
+                      <%= button_to '拒绝', admin_organization_reject_member_path(@organization, profile_id: profile.id), 
+                          method: :post, class: 'btn-error btn-sm', 
+                          data: { confirm: '确定要拒绝该成员吗？' } %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-4">
+          <%= paginate @pending_profiles, param_name: :pending_page %>
+        </div>
+      <% else %>
+        <p class="text-on-surface-variant text-center py-8">暂无待审核成员</p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Approved Members -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="text-xl font-semibold text-on-surface">已批准成员 (<%= @approved_profiles.total_count %>)</h2>
+    </div>
+    <div class="card-body">
+      <% if @approved_profiles.any? %>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-border">
+                <th class="text-left p-4 text-on-surface-variant">头像</th>
+                <th class="text-left p-4 text-on-surface-variant">姓名</th>
+                <th class="text-left p-4 text-on-surface-variant">职位</th>
+                <th class="text-left p-4 text-on-surface-variant">科室</th>
+                <th class="text-left p-4 text-on-surface-variant">邮箱</th>
+                <th class="text-left p-4 text-on-surface-variant">批准时间</th>
+                <th class="text-right p-4 text-on-surface-variant">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @approved_profiles.each do |profile| %>
+                <tr class="border-b border-border hover:bg-surface-variant/10">
+                  <td class="p-4">
+                    <% if profile.avatar.attached? %>
+                      <%= image_tag profile.avatar.variant(resize_to_limit: [50, 50]), class: 'w-12 h-12 rounded-full object-cover' %>
+                    <% else %>
+                      <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="text-primary font-semibold"><%= profile.full_name[0] %></span>
+                      </div>
+                    <% end %>
+                  </td>
+                  <td class="p-4 text-on-surface"><%= profile.full_name %></td>
+                  <td class="p-4 text-on-surface"><%= profile.title %></td>
+                  <td class="p-4 text-on-surface"><%= profile.department %></td>
+                  <td class="p-4 text-on-surface"><%= profile.email %></td>
+                  <td class="p-4 text-on-surface-variant"><%= profile.updated_at.strftime('%Y-%m-%d') %></td>
+                  <td class="p-4 text-right">
+                    <%= link_to '查看名片', card_path(profile.slug), target: '_blank', class: 'btn-secondary btn-sm' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-4">
+          <%= paginate @approved_profiles, param_name: :approved_page %>
+        </div>
+      <% else %>
+        <p class="text-on-surface-variant text-center py-8">暂无已批准成员</p>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -7,4 +7,22 @@
 #
 require 'open-uri'
 
-# Write your seed data here
+# Create default organization (only if none exists)
+if Organization.count.zero?
+  # Find or create admin user
+  admin_user = User.find_or_create_by!(email: 'admin@example.com') do |user|
+    user.name = 'Admin User'
+    user.password = 'password123'
+    user.verified = true
+  end
+
+  org = Organization.create!(
+    name: '尚至医疗',
+    description: '专业医疗团队，提供优质医疗服务',
+    admin_user: admin_user
+  )
+
+  puts "Created default organization: #{org.name}"
+  puts "Invite token: #{org.invite_token}"
+  puts "Invite URL: http://localhost:3000/sign_up?invite_token=#{org.invite_token}"
+end

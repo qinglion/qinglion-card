@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_08_105217) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_09_025829) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -214,6 +214,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_08_105217) do
     t.index ["profile_id"], name: "index_honors_on_profile_id"
   end
 
+  create_table "organizations", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "admin_user_id"
+    t.string "invite_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["admin_user_id"], name: "index_organizations_on_admin_user_id"
+    t.index ["invite_token"], name: "index_organizations_on_invite_token", unique: true
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.bigint "user_id"
     t.string "full_name"
@@ -232,7 +243,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_08_105217) do
     t.boolean "onboarding_completed", default: false
     t.string "onboarding_step"
     t.jsonb "onboarding_data"
+    t.integer "organization_id"
+    t.string "status", default: "pending"
+    t.string "department"
+    t.index ["organization_id"], name: "index_profiles_on_organization_id"
     t.index ["slug"], name: "index_profiles_on_slug", unique: true
+    t.index ["status"], name: "index_profiles_on_status"
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
