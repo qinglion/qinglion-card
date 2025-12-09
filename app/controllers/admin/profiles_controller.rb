@@ -27,7 +27,12 @@ class Admin::ProfilesController < Admin::BaseController
 
   def update
     if @profile.update(profile_params)
-      redirect_to admin_profile_path(@profile), notice: 'Profile was successfully updated.'
+      # If coming from onboarding, redirect back to onboarding
+      if params[:from_onboarding]
+        redirect_to onboardings_path, notice: '保存成功！继续完善信息或预览名片'
+      else
+        redirect_to admin_profile_path(@profile), notice: 'Profile was successfully updated.'
+      end
     else
       render :edit, status: :unprocessable_entity
     end
@@ -45,6 +50,6 @@ class Admin::ProfilesController < Admin::BaseController
   end
 
   def profile_params
-    params.require(:profile).permit(:full_name, :title, :company, :phone, :email, :location, :bio, :specializations, :avatar_url, :stats, :slug, :user_id)
+    params.require(:profile).permit(:full_name, :title, :company, :phone, :email, :location, :bio, :specializations, :avatar_url, :avatar, :department, :stats, :slug, :user_id)
   end
 end

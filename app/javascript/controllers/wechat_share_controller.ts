@@ -83,6 +83,7 @@ export default class extends Controller<HTMLElement> {
 
     wx.ready(() => {
       console.log('WeChat JS-SDK ready')
+      console.log('Setting up share config...')
       this.setupShareConfig()
     })
 
@@ -98,6 +99,14 @@ export default class extends Controller<HTMLElement> {
       link: this.linkValue || window.location.href,
       imgUrl: this.imgUrlValue || this.getDefaultImage()
     }
+
+    // Debug: Print share parameters
+    console.log('=== WeChat Share Config ===')
+    console.log('Title:', shareData.title)
+    console.log('Description:', shareData.desc)
+    console.log('Link:', shareData.link)
+    console.log('Image URL:', shareData.imgUrl)
+    console.log('==========================')
 
     // New API (1.4.0+)
     wx.updateAppMessageShareData({

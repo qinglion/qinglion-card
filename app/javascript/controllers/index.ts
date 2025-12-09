@@ -8,6 +8,7 @@ import ProfileChatController from "./profile_chat_controller"
 import ProfileOnboardingController from "./profile_onboarding_controller"
 import DashboardAssistantController from "./dashboard_assistant_controller"
 import WechatShareController from "./wechat_share_controller"
+import ImagePreviewController from "./image_preview_controller"
 
 const application = Application.start()
 
@@ -19,5 +20,6 @@ application.register("profile-chat", ProfileChatController)
 application.register("profile-onboarding", ProfileOnboardingController)
 application.register("dashboard-assistant", DashboardAssistantController)
 application.register("wechat-share", WechatShareController)
+application.register("image-preview", ImagePreviewController)
 
 window.Stimulus = application

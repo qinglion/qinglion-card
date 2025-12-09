@@ -2,6 +2,7 @@ class CardsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:show]
 
   def show
+    @full_render = true  # Hide navbar for card view
     @profile = Profile.friendly.find(params[:id])
     @case_studies = @profile.case_studies.limit(10)
     @honors = @profile.honors.limit(8)
