@@ -105,7 +105,7 @@ class User < ApplicationRecord
   
   def create_default_profile
     create_profile(
-      full_name: email.split('@').first.titleize,
+      full_name: name.presence || email.split('@').first.titleize,
       title: 'Professional',
       email: email
     )
