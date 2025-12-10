@@ -1,6 +1,18 @@
 class Profile < ApplicationRecord
   extend FriendlyId
-  friendly_id :full_name, use: :slugged
+  friendly_id :slug_candidates, use: :slugged
+  
+  def slug_candidates
+    [
+      :email_username,
+      [:email_username, :id]
+    ]
+  end
+  
+  def email_username
+    return nil if email.blank?
+    email.split('@').first
+  end
 
   belongs_to :user
   belongs_to :organization, optional: true
@@ -73,7 +85,16 @@ class Profile < ApplicationRecord
   def approve!
     transaction do
       update!(status: 'approved')
-      user.update!(activated: true) if user.present?
+      if user.present?
+        token = user.generate_registration_token
+        user.update!(activated: true)
+        
+        UserMailer.with(
+          user: user, 
+          token: token, 
+          organization_name: organization&.name || 'Our Platform'
+        ).approval_notification.deliver_later
+      end
     end
   rescue ActiveRecord::RecordInvalid => e
     errors.add(:base, e.message)

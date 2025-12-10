@@ -1,41 +1,15 @@
 class Admin::OrganizationsController < Admin::BaseController
-  before_action :set_organization, only: [:show, :edit, :update, :destroy, :members, :approve_member, :reject_member]
-
-  def index
-    @organizations = Organization.page(params[:page]).per(10)
-  end
-
-  def show
-  end
-
-  def new
-    @organization = Organization.new
-  end
-
-  def create
-    @organization = Organization.new(organization_params)
-
-    if @organization.save
-      redirect_to admin_organization_path(@organization), notice: 'Organization was successfully created.'
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
+  before_action :set_organization
 
   def edit
   end
 
   def update
     if @organization.update(organization_params)
-      redirect_to admin_organization_path(@organization), notice: 'Organization was successfully updated.'
+      redirect_to edit_admin_organization_path, notice: 'Organization settings updated successfully.'
     else
       render :edit, status: :unprocessable_entity
     end
-  end
-
-  def destroy
-    @organization.destroy
-    redirect_to admin_organizations_path, notice: 'Organization was successfully deleted.'
   end
 
   def members
@@ -64,10 +38,13 @@ class Admin::OrganizationsController < Admin::BaseController
   private
 
   def set_organization
-    @organization = Organization.find(params[:id])
+    @organization = Organization.first_or_create!(
+      name: '默认组织',
+      description: '系统默认组织'
+    )
   end
 
   def organization_params
-    params.require(:organization).permit(:name, :description, :admin_user_id, :logo, :background_image)
+    params.require(:organization).permit(:name, :description, :logo, :background_image)
   end
 end

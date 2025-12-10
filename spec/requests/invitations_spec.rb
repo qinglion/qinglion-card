@@ -28,8 +28,6 @@ RSpec.describe "Invitations", type: :request do
         token: organization.invite_token,
         user: {
           email: "newmember@example.com",
-          password: "password123",
-          password_confirmation: "password123",
           profile_attributes: {
             full_name: "张三丰",
             title: "主任医师",
@@ -54,24 +52,25 @@ RSpec.describe "Invitations", type: :request do
       expect(user.profile.organization_id).to eq(organization.id)
     end
 
-    it "prevents unactivated user from logging in" do
+    it "prevents unactivated user from logging in without password setup" do
       post invitation_path, params: valid_params
       user = User.last
 
+      # User cannot login without setting password first
       post sign_in_path, params: {
         user: {
           email: user.email,
-          password: "password123"
+          password: "anypassword"
         }
       }
 
       expect(response).to have_http_status(:redirect)
       expect(response.location).to include(sign_in_path)
       follow_redirect!
-      expect(response.body).to match(/尚未激活/)
+      expect(response.body).to match(/邮箱或密码错误|尚未激活/)
     end
 
-    it "allows login after profile approval" do
+    it "generates registration token after profile approval" do
       post invitation_path, params: valid_params
       user = User.last
       profile = user.profile
@@ -82,12 +81,37 @@ RSpec.describe "Invitations", type: :request do
 
       expect(user.activated).to eq(true)
       expect(profile.status).to eq("approved")
+      expect(user.registration_token).to be_present
+      expect(user.registration_token_expires_at).to be_present
+    end
+    
+    it "allows user to set password and login with registration token" do
+      post invitation_path, params: valid_params
+      user = User.last
+      profile = user.profile
+      
+      # Approve and get token
+      profile.approve!
+      user.reload
+      token = user.registration_token
 
-      # 现在可以登录
+      # User sets password via token link
+      patch identity_registration_completion_path(token: token), params: {
+        user: {
+          password: "newpassword123",
+          password_confirmation: "newpassword123"
+        }
+      }
+      
+      expect(response).to redirect_to(sign_in_path)
+      user.reload
+      expect(user.registration_token).to be_nil
+
+      # Now can login with new password
       post sign_in_path, params: {
         user: {
           email: user.email,
-          password: "password123"
+          password: "newpassword123"
         }
       }
 

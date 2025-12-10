@@ -2,7 +2,7 @@
   <div class="card w-full max-w-2xl">
     <div class="card-body">
       <h1 class="text-3xl font-bold text-center text-primary mb-2">加入「<%= @organization.name %>」</h1>
-      <p class="text-center text-on-surface-variant mb-8">填写以下信息完成成员注册，管理员审核通过后账号将被激活</p>
+      <p class="text-center text-on-surface-variant mb-8">填写以下信息提交申请，管理员审核通过后您将收到邮件通知并可设置密码完成注册</p>
 
       <%= render 'shared/form_error_message', model: @user %>
 
@@ -15,25 +15,7 @@
           <%= form.email_field :email, required: true, autofocus: true, autocomplete: "email", class: "form-input" %>
         </div>
 
-        <!-- 密码 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <%= form.label :password, class: "form-label" do %>
-              密码 <span class="text-error">*</span>
-            <% end %>
-            <%= form.password_field :password, required: true, autocomplete: "new-password", class: "form-input" %>
-            <div class="form-help">
-              至少 <%= User::MIN_PASSWORD %> 个字符
-            </div>
-          </div>
 
-          <div>
-            <%= form.label :password_confirmation, class: "form-label" do %>
-              确认密码 <span class="text-error">*</span>
-            <% end %>
-            <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", class: "form-input" %>
-          </div>
-        </div>
 
         <!-- Profile 信息 -->
         <%= form.fields_for :profile do |profile_form| %>
@@ -73,9 +55,9 @@
 
             <div>
               <%= profile_form.label :department, class: "form-label" do %>
-                部门
+                类别
               <% end %>
-              <%= profile_form.text_field :department, class: "form-input", placeholder: "例如：心内科" %>
+              <%= profile_form.text_field :department, class: "form-input", placeholder: "例如：专家" %>
             </div>
           </div>
 

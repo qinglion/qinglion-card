@@ -1,7 +1,6 @@
 <div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6">
+  <div class="mb-6">
     <h1 class="text-3xl font-bold text-on-surface"><%= @organization.name %> - 成员管理</h1>
-    <%= link_to '返回', admin_organization_path(@organization), class: 'btn-secondary' %>
   </div>
 
   <!-- Pending Members -->
@@ -18,7 +17,7 @@
                 <th class="text-left p-4 text-on-surface-variant">头像</th>
                 <th class="text-left p-4 text-on-surface-variant">姓名</th>
                 <th class="text-left p-4 text-on-surface-variant">职位</th>
-                <th class="text-left p-4 text-on-surface-variant">科室</th>
+                <th class="text-left p-4 text-on-surface-variant">类别</th>
                 <th class="text-left p-4 text-on-surface-variant">邮箱</th>
                 <th class="text-left p-4 text-on-surface-variant">申请时间</th>
                 <th class="text-right p-4 text-on-surface-variant">操作</th>
@@ -78,7 +77,7 @@
                 <th class="text-left p-4 text-on-surface-variant">头像</th>
                 <th class="text-left p-4 text-on-surface-variant">姓名</th>
                 <th class="text-left p-4 text-on-surface-variant">职位</th>
-                <th class="text-left p-4 text-on-surface-variant">科室</th>
+                <th class="text-left p-4 text-on-surface-variant">类别</th>
                 <th class="text-left p-4 text-on-surface-variant">邮箱</th>
                 <th class="text-left p-4 text-on-surface-variant">批准时间</th>
                 <th class="text-right p-4 text-on-surface-variant">操作</th>

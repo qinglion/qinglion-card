@@ -1,9 +1,8 @@
 class TeamsController < ApplicationController
-  before_action :authenticate_user!
 
   def index
     @full_render = true  # Hide navbar for teams view
-    @current_user_profile = current_user.profile
+    @current_user_profile = current_user&.profile
     
     # Get organization based on profile_id parameter
     if params[:profile_id].present?
@@ -31,7 +30,7 @@ class TeamsController < ApplicationController
       @departments = @members.group_by(&:department)
       
       # Check if current user is admin of this organization
-      @is_admin = @organization.is_admin?(current_user)
+      @is_admin = current_user && @organization.is_admin?(current_user)
       @is_own_profile = @profile&.id == @current_user_profile&.id
     end
   end

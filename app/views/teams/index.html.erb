@@ -1,60 +1,52 @@
 <div class="min-h-screen bg-surface pb-20">
-  <!-- Header with organization info -->
-  <div class="bg-gradient-to-r from-primary to-primary-dark text-white py-12">
-    <div class="container mx-auto px-4">
+  <!-- Header with organization info - Medical team style -->
+  <div class="bg-gradient-to-br from-[#5B8DBE] to-[#4A7BA8] text-white py-16">
+    <div class="container mx-auto px-4 text-center">
       <% if @organization %>
-        <h1 class="text-3xl font-bold mb-2"><%= @organization.name %></h1>
-        <p class="text-white/80"><%= @organization.description %></p>
+        <h1 class="text-4xl md:text-5xl font-bold tracking-wide">
+          <%= @organization.name %>
+        </h1>
       <% end %>
     </div>
   </div>
 
   <!-- Members list by department -->
-  <div class="container mx-auto px-4 py-8">
+  <div class="container mx-auto px-3 py-8">
     <% if @organization && @departments.any? %>
       <% @departments.each do |department, members| %>
         <div class="mb-12">
-          <h2 class="text-2xl font-bold text-primary mb-6 pb-2 border-b-2 border-primary">
+          <!-- Department title with left border -->
+          <h2 class="text-xl font-bold text-primary mb-6 pl-3 border-l-4 border-primary">
             <%= department.presence || '其他' %>
           </h2>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Members grid - 3 columns on mobile -->
+          <div class="grid grid-cols-3 gap-4">
             <% members.each do |profile| %>
-              <%= link_to card_path(profile.slug), class: "card hover:shadow-lg transition-shadow" do %>
-                <div class="card-body">
-                  <div class="flex items-center gap-4">
-                    <!-- Avatar -->
-                    <div class="flex-shrink-0">
-                      <% if profile.avatar.attached? %>
-                        <%= image_tag profile.avatar, 
-                            class: 'w-20 h-20 rounded-full object-cover' %>
-                      <% else %>
-                        <div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
-                          <span class="text-2xl text-primary font-semibold">
+              <%= link_to card_path(profile.slug), class: "group block" do %>
+                <!-- Compact professional card -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+                  <!-- Professional photo -->
+                  <div class="aspect-[3/4] overflow-hidden bg-gradient-to-br from-[#E8F0F7] to-[#D4E4F0]">
+                    <% if profile.avatar.attached? %>
+                      <%= image_tag profile.avatar, 
+                          class: 'w-full h-full object-cover' %>
+                    <% else %>
+                      <div class="w-full h-full flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                          <span class="text-xl text-primary font-bold">
                             <%= profile.full_name[0] %>
                           </span>
                         </div>
-                      <% end %>
-                    </div>
+                      </div>
+                    <% end %>
+                  </div>
 
-                    <!-- Info -->
-                    <div class="flex-1">
-                      <h3 class="text-lg font-bold text-on-surface mb-1">
-                        <%= profile.full_name %>
-                      </h3>
-                      <p class="text-sm text-on-surface-variant mb-2">
-                        <%= profile.title %>
-                      </p>
-                      <% if profile.specializations_array.any? %>
-                        <div class="flex flex-wrap gap-1">
-                          <% profile.specializations_array.take(2).each do |spec| %>
-                            <span class="badge badge-sm">
-                              <%= spec %>
-                            </span>
-                          <% end %>
-                        </div>
-                      <% end %>
-                    </div>
+                  <!-- Name and title info -->
+                  <div class="p-3 text-center">
+                    <h3 class="text-sm font-bold text-primary mb-1 leading-tight">
+                      <%= profile.full_name %>
+                    </h3>
                   </div>
                 </div>
               <% end %>

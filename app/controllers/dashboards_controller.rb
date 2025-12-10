@@ -33,9 +33,18 @@ class DashboardsController < ApplicationController
 
   def update_settings
     if @profile.update(profile_params)
-      redirect_to dashboards_path, notice: '名片信息更新成功'
+      # If coming from onboarding, redirect back to onboarding
+      if params[:from_onboarding]
+        redirect_to onboardings_path, notice: '保存成功！继续完善信息或预览名片'
+      else
+        redirect_to dashboards_path, notice: '名片信息更新成功'
+      end
     else
-      render :settings, status: :unprocessable_entity
+      if params[:from_onboarding]
+        render 'onboardings/index', status: :unprocessable_entity
+      else
+        render :settings, status: :unprocessable_entity
+      end
     end
   end
 
@@ -44,7 +53,7 @@ class DashboardsController < ApplicationController
   def profile_params
     params.require(:profile).permit(
       :full_name, :title, :company, :phone, :email, :location, :bio,
-      :avatar, specializations: [],
+      :avatar, :background_image, :department, :slug, specializations: [],
       stats: [:years_experience, :cases_handled, :clients_served, :success_rate]
     )
   end

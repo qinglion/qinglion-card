@@ -17,8 +17,8 @@ if Organization.count.zero?
   end
 
   org = Organization.create!(
-    name: '尚至医疗',
-    description: '专业医疗团队，提供优质医疗服务',
+    name: '默认组织',
+    description: '系统默认组织',
     admin_user: admin_user
   )
 

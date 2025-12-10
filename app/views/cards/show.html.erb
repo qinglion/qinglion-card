@@ -1,6 +1,7 @@
+<% content_for :title, @profile.full_name %>
 <div class="min-h-screen bg-surface"
      data-controller="wechat-share"
-     data-wechat-share-title-value="<%= @profile.full_name %> - <%= @profile.title %>"
+     data-wechat-share-title-value="<%= @profile.full_name %>"
      data-wechat-share-desc-value="<%= @profile.bio&.truncate(100) || '专业名片分享' %>"
      data-wechat-share-link-value="<%= request.original_url %>"
      data-wechat-share-img-url-value="<%= @share_image_url %>">

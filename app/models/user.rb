@@ -36,6 +36,7 @@ class User < ApplicationRecord
     email
   end
   generates_token_for :password_reset, expires_in: 20.minutes
+  generates_token_for :registration_complete, expires_in: 7.days
 
   has_many :sessions, dependent: :destroy
 
@@ -114,6 +115,23 @@ class User < ApplicationRecord
   
   def activate!
     update(activated: true)
+  end
+  
+  def generate_registration_token
+    self.registration_token = SecureRandom.urlsafe_base64(32)
+    self.registration_token_expires_at = 7.days.from_now
+    save!
+    registration_token
+  end
+  
+  def valid_registration_token?(token)
+    return false if registration_token.blank? || registration_token_expires_at.blank?
+    return false if registration_token_expires_at < Time.current
+    registration_token == token
+  end
+  
+  def clear_registration_token!
+    update(registration_token: nil, registration_token_expires_at: nil)
   end
 
   private

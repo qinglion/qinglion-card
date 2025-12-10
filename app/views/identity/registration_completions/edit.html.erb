@@ -1,0 +1,38 @@
+<div class="container-sm flex items-center justify-center flex-1 py-12">
+  <div class="card w-full max-w-md">
+    <div class="card-body">
+      <h1 class="text-3xl font-bold text-center text-primary mb-2">设置登录密码</h1>
+      <p class="text-center text-on-surface-variant mb-8">欢迎！请设置您的登录密码完成注册</p>
+
+      <%= render 'shared/form_error_message', model: @user %>
+
+      <%= form_with model: @user, url: identity_registration_completion_path(token: params[:token]), method: :patch, local: true, class: "space-y-6" do |form| %>
+        <div>
+          <%= form.label :password, class: "form-label" do %>
+            密码 <span class="text-error">*</span>
+          <% end %>
+          <%= form.password_field :password, required: true, autofocus: true, autocomplete: "new-password", class: "form-input" %>
+          <div class="form-help">
+            至少 <%= User::MIN_PASSWORD %> 个字符
+          </div>
+        </div>
+
+        <div>
+          <%= form.label :password_confirmation, class: "form-label" do %>
+            确认密码 <span class="text-error">*</span>
+          <% end %>
+          <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", class: "form-input" %>
+        </div>
+
+        <div class="pt-2">
+          <%= form.submit "设置密码并完成注册", class: "btn-primary w-full btn-lg" %>
+        </div>
+      <% end %>
+
+      <div class="text-center mt-8">
+        <p class="text-on-surface-variant text-sm">已有账号？</p>
+        <%= link_to "立即登录", sign_in_path, class: "text-primary hover:text-primary-dark underline font-medium transition-colors" %>
+      </div>
+    </div>
+  </div>
+</div>

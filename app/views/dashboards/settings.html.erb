@@ -30,6 +30,18 @@
               <%= form.label :company, '公司/机构', class: "form-label" %>
               <%= form.text_field :company, class: "form-input", placeholder: "请输入您所在的公司或机构" %>
             </div>
+            
+            <div>
+              <%= form.label :slug, '名片链接', class: "form-label" %>
+              <div class="flex items-center gap-2">
+                <span class="text-secondary whitespace-nowrap">/c/</span>
+                <%= form.text_field :slug, class: "form-input", placeholder: "例如：zhangsan 或 mitnickseng" %>
+              </div>
+              <div class="form-help">
+                自定义您的名片链接，只能使用英文字母、数字和连字符。当前链接：
+                <a href="<%= card_url(@profile) %>" target="_blank" class="text-primary hover:underline"><%= card_url(@profile) %></a>
+              </div>
+            </div>
           </div>
 
           <!-- Contact Information -->

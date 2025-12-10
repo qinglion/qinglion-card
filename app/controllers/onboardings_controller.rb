@@ -10,6 +10,14 @@ class OnboardingsController < ApplicationController
     end
   end
 
+  def skip
+    @profile.update(
+      onboarding_completed: true,
+      onboarding_step: 'skipped'
+    )
+    redirect_to dashboards_path, notice: '已跳过名片设置，您可以稍后在设置中完善信息。'
+  end
+
   private
 
   def set_profile

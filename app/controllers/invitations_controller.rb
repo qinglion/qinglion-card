@@ -21,17 +21,19 @@ class InvitationsController < ApplicationController
     @user = User.new(user_params)
     @user.verified = false
     @user.activated = false
+    @user.password = SecureRandom.hex(16)
+    
+    # Set organization and status for nested profile
+    if @user.profile
+      @user.profile.organization_id = @organization.id
+      @user.profile.status = 'pending'
+      @user.profile.email = @user.email
+    end
     
     if @user.save
-      @user.profile.update(
-        organization_id: @organization.id,
-        status: 'pending',
-        email: @user.email
-      )
-      
-      redirect_to root_path, notice: "注册成功！您的申请已提交，请等待管理员审核。审核通过后您将可以登录使用。"
+      redirect_to root_path, notice: "申请已提交成功！请等待管理员审核。审核通过后，您将收到邮件通知并可设置密码完成注册。"
     else
-      flash.now[:alert] = "注册失败，请检查表单信息"
+      flash.now[:alert] = "提交失败，请检查表单信息"
       render :new, status: :unprocessable_entity
     end
   end
@@ -45,7 +47,7 @@ class InvitationsController < ApplicationController
 
   def user_params
     params.require(:user).permit(
-      :email, :password, :password_confirmation,
+      :email,
       profile_attributes: [:full_name, :title, :department, :bio, :avatar]
     )
   end

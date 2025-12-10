@@ -39,8 +39,10 @@ class Admin::ProfilesController < Admin::BaseController
   end
 
   def destroy
+    user = @profile.user
     @profile.destroy
-    redirect_to admin_profiles_path, notice: 'Profile was successfully deleted.'
+    user&.destroy
+    redirect_to admin_profiles_path, notice: 'Profile and associated user were successfully deleted.'
   end
 
   private

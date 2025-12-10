@@ -19,4 +19,12 @@ class UserMailer < ApplicationMailer
 
     mail to: @user.email, subject: "[#{Rails.application.config.x.appname}] Invitation instructions"
   end
+  
+  def approval_notification
+    @user = params[:user]
+    @token = params[:token]
+    @organization_name = params[:organization_name]
+    
+    mail to: @user.email, subject: "[#{Rails.application.config.x.appname}] 您的申请已通过审核"
+  end
 end

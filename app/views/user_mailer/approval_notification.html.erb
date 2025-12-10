@@ -1,0 +1,29 @@
+<div class="email-container">
+  <div class="email-card">
+    <div class="email-header">
+      <h1 class="email-title">🎉 欢迎加入「<%= @organization_name %>」</h1>
+    </div>
+    
+    <div class="email-body">
+      <p class="email-text">你好，<%= @user.profile&.full_name || @user.name %>：</p>
+      
+      <p class="email-text">恭喜！您申请加入「<%= @organization_name %>」的申请已经通过审核。</p>
+      
+      <p class="email-text">为了完成注册，请点击下方按钮设置您的登录密码：</p>
+      
+      <div class="email-button-container">
+        <%= link_to "设置密码并激活账号", edit_identity_registration_completion_url(token: @token), class: "email-button" %>
+      </div>
+      
+      <p class="email-text"><strong>您的登录邮箱：</strong><%= @user.email %></p>
+      
+      <p class="email-text" style="color: #666; font-size: 14px;">
+        注意：该链接将在 7 天后过期。如果链接失效，请联系管理员重新审批。
+      </p>
+      
+      <hr class="email-divider">
+      
+      <p class="email-footer">如有任何问题，请回复此邮件，我们的支持团队会帮助您。</p>
+    </div>
+  </div>
+</div>
