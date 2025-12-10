@@ -1,5 +1,5 @@
 class Organization < ApplicationRecord
-  belongs_to :admin_user, class_name: 'User', foreign_key: 'admin_user_id'
+  belongs_to :admin_user, class_name: 'User', foreign_key: 'admin_user_id', optional: true
   has_many :profiles, dependent: :nullify
   has_one_attached :logo
   has_one_attached :background_image

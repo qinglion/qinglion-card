@@ -16,7 +16,7 @@ class Admin::ProfilesController < Admin::BaseController
     @profile = Profile.new(profile_params)
 
     if @profile.save
-      redirect_to admin_profile_path(@profile), notice: 'Profile was successfully created.'
+      redirect_to admin_profile_path(@profile), notice: '个人资料创建成功'
     else
       render :new, status: :unprocessable_entity
     end
@@ -31,7 +31,7 @@ class Admin::ProfilesController < Admin::BaseController
       if params[:from_onboarding]
         redirect_to onboardings_path, notice: '保存成功！继续完善信息或预览名片'
       else
-        redirect_to admin_profile_path(@profile), notice: 'Profile was successfully updated.'
+        redirect_to admin_profile_path(@profile), notice: '个人资料更新成功'
       end
     else
       render :edit, status: :unprocessable_entity
@@ -42,7 +42,7 @@ class Admin::ProfilesController < Admin::BaseController
     user = @profile.user
     @profile.destroy
     user&.destroy
-    redirect_to admin_profiles_path, notice: 'Profile and associated user were successfully deleted.'
+    redirect_to admin_profiles_path, notice: '个人资料和关联用户已成功删除'
   end
 
   private

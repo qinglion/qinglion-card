@@ -16,7 +16,7 @@ class Admin::HonorsController < Admin::BaseController
     @honor = Honor.new(honor_params)
 
     if @honor.save
-      redirect_to admin_honor_path(@honor), notice: 'Honor was successfully created.'
+      redirect_to admin_honor_path(@honor), notice: '荣誉奖项创建成功'
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class Admin::HonorsController < Admin::BaseController
 
   def update
     if @honor.update(honor_params)
-      redirect_to admin_honor_path(@honor), notice: 'Honor was successfully updated.'
+      redirect_to admin_honor_path(@honor), notice: '荣誉奖项更新成功'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class Admin::HonorsController < Admin::BaseController
 
   def destroy
     @honor.destroy
-    redirect_to admin_honors_path, notice: 'Honor was successfully deleted.'
+    redirect_to admin_honors_path, notice: '荣誉奖项删除成功'
   end
 
   private

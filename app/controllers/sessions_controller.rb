@@ -37,12 +37,12 @@ class SessionsController < ApplicationController
     @session = Current.session
     @session.destroy!
     cookies.delete(:session_token)
-    redirect_to(sign_in_path, notice: "That session has been logged out")
+    redirect_to(sign_in_path, notice: "该会话已退出登录")
   end
 
   def destroy_one
     @session = current_user.sessions.find(params[:id])
     @session.destroy!
-    redirect_to(devices_session_path, notice: "That session has been logged out")
+    redirect_to(devices_session_path, notice: "该会话已退出登录")
   end
 end

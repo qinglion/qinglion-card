@@ -6,7 +6,7 @@ class PasswordsController < ApplicationController
 
   def update
     if current_user.update(user_params)
-      redirect_to root_path, notice: "Your password has been changed"
+      redirect_to root_path, notice: "\u60a8\u7684\u5bc6\u7801\u5df2\u66f4\u6539"
     else
       flash.now[:alert] = handle_password_errors(current_user)
       render :edit, status: :unprocessable_entity

@@ -16,9 +16,9 @@ class ProfilesController < ApplicationController
       need_email_verification = @user.previous_changes.include?(:email)
       if need_email_verification
         send_email_verification
-        additional_notice = "and sent a verification email to your new email address"
+        additional_notice = "\u5e76\u5df2\u5411\u60a8\u7684\u65b0\u90ae\u7bb1\u53d1\u9001\u9a8c\u8bc1\u90ae\u4ef6"
       end
-      redirect_to profile_path, notice: "Profile updated #{additional_notice}"
+      redirect_to profile_path, notice: "\u4e2a\u4eba\u8d44\u6599\u5df2\u66f4\u65b0 #{additional_notice}"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -32,13 +32,13 @@ class ProfilesController < ApplicationController
     @user = current_user
 
     unless @user.authenticate(params[:user][:current_password])
-      flash.now[:alert] = "Password not correct"
+      flash.now[:alert] = "\u5bc6\u7801\u4e0d\u6b63\u786e"
       render :edit_password, status: :unprocessable_entity
       return
     end
 
     if @user.update(password_params)
-      redirect_to profile_path, notice: "Password updated"
+      redirect_to profile_path, notice: "\u5bc6\u7801\u5df2\u66f4\u65b0"
     else
       render :edit_password, status: :unprocessable_entity
     end

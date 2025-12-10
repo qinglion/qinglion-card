@@ -16,7 +16,7 @@ class Admin::CaseStudiesController < Admin::BaseController
     @case_study = CaseStudy.new(case_study_params)
 
     if @case_study.save
-      redirect_to admin_case_study_path(@case_study), notice: 'Case study was successfully created.'
+      redirect_to admin_case_study_path(@case_study), notice: '案例研究创建成功'
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class Admin::CaseStudiesController < Admin::BaseController
 
   def update
     if @case_study.update(case_study_params)
-      redirect_to admin_case_study_path(@case_study), notice: 'Case study was successfully updated.'
+      redirect_to admin_case_study_path(@case_study), notice: '案例研究更新成功'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class Admin::CaseStudiesController < Admin::BaseController
 
   def destroy
     @case_study.destroy
-    redirect_to admin_case_studies_path, notice: 'Case study was successfully deleted.'
+    redirect_to admin_case_studies_path, notice: '案例研究删除成功'
   end
 
   private

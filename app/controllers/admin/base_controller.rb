@@ -21,7 +21,7 @@ class Admin::BaseController < ActionController::Base
     end
 
     if current_admin.password_digest != session[:current_admin_token]
-      redirect_to admin_login_path, alert: 'Password was changed, please log in again'
+      redirect_to admin_login_path, alert: '密码已更改，请重新登录'
       return
     end
   end
@@ -48,7 +48,7 @@ class Admin::BaseController < ActionController::Base
     return if controller_name == 'accounts' && action_name == 'edit'
     return if controller_name == 'accounts' && action_name == 'update'
 
-    flash.now[:warning] = "Welcome! For security reasons, we recommend changing your default password. #{ActionController::Base.helpers.link_to('Change Password', edit_admin_account_path, class: 'underline')}".html_safe
+    flash.now[:warning] = "欢迎！出于安全考虑，我们建议您修改默认密码。#{ActionController::Base.helpers.link_to('修改密码', edit_admin_account_path, class: 'underline')}".html_safe
   end
 
   def log_admin_action

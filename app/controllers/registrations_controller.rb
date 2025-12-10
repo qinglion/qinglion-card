@@ -13,7 +13,7 @@ class RegistrationsController < ApplicationController
       cookies.signed.permanent[:session_token] = { value: session_record.id, httponly: true }
 
       send_email_verification
-      redirect_to root_path, notice: "Welcome! You have signed up successfully"
+      redirect_to root_path, notice: "\u6b22\u8fce\uff01\u60a8\u5df2\u6210\u529f\u6ce8\u518c"
     else
       flash.now[:alert] = handle_password_errors(@user)
       render :new, status: :unprocessable_entity
