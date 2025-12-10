@@ -89,6 +89,36 @@ class Admin::OrganizationsController < Admin::BaseController
       redirect_to members_admin_organization_path(@organization), alert: '添加用户失败。'
     end
   end
+  
+  def resend_approval_email
+    profile = @organization.profiles.find(params[:profile_id])
+    
+    unless profile.approved?
+      redirect_to members_admin_organization_path(@organization), alert: '只能对已批准的成员重新发送邮件。'
+      return
+    end
+    
+    user = profile.user
+    
+    if user.nil?
+      redirect_to members_admin_organization_path(@organization), alert: '该成员没有关联的用户账户。'
+      return
+    end
+    
+    begin
+      token = user.generate_registration_token
+      UserMailer.with(
+        user: user,
+        token: token,
+        organization_name: @organization.name
+      ).approval_notification.deliver_now
+      
+      redirect_to members_admin_organization_path(@organization), notice: "已成功重新发送邮件至 #{user.email}。"
+    rescue => e
+      Rails.logger.error "Failed to resend approval email: #{e.message}"
+      redirect_to members_admin_organization_path(@organization), alert: "邮件发送失败：#{e.message}"
+    end
+  end
 
   private
 

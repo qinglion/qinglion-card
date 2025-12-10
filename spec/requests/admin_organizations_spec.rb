@@ -55,6 +55,49 @@ RSpec.describe "Admin::Organizations", type: :request do
     end
   end
 
+  describe "POST /admin/organization/members/:profile_id/resend_email" do
+    let(:organization) { Organization.first_or_create!(name: '默认组织') }
+    
+    it "resends approval email to approved member" do
+      user = create(:user)
+      profile = user.profile
+      profile.update(organization: organization, status: 'approved')
+      
+      expect {
+        post resend_email_member_admin_organization_path(profile_id: profile.id)
+      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      
+      expect(response).to have_http_status(:redirect)
+      expect(flash[:notice]).to include('已成功重新发送邮件')
+      
+      # Verify email content
+      email = ActionMailer::Base.deliveries.last
+      expect(email.to).to include(user.email)
+      expect(email.subject).to include('您的申请已通过审核')
+    end
+    
+    it "does not resend email to non-approved member" do
+      user = create(:user)
+      profile = user.profile
+      profile.update(organization: organization, status: 'pending')
+      
+      post resend_email_member_admin_organization_path(profile_id: profile.id)
+      
+      expect(response).to have_http_status(:redirect)
+      expect(flash[:alert]).to include('只能对已批准的成员重新发送邮件')
+    end
+    
+    it "handles error when profile has no user" do
+      profile = create(:profile, organization: organization, status: 'approved')
+      profile.update_column(:user_id, nil)
+      
+      post resend_email_member_admin_organization_path(profile_id: profile.id)
+      
+      expect(response).to have_http_status(:redirect)
+      expect(flash[:alert]).to include('该成员没有关联的用户账户')
+    end
+  end
+
   describe "POST /admin/organization/add_user" do
     let(:organization) { Organization.first_or_create!(name: '默认组织') }
     

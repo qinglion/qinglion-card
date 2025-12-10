@@ -133,7 +133,12 @@
                   <td class="p-4 text-on-surface"><%= profile.email %></td>
                   <td class="p-4 text-on-surface-variant"><%= profile.updated_at.strftime('%Y-%m-%d') %></td>
                   <td class="p-4 text-right">
-                    <%= link_to '查看名片', card_path(profile.slug), target: '_blank', class: 'btn-secondary btn-sm' %>
+                    <div class="flex justify-end gap-2">
+                      <%= link_to '查看名片', card_path(profile.slug), target: '_blank', class: 'btn-secondary btn-sm' %>
+                      <%= button_to '重新发送邮件', resend_email_member_admin_organization_path(@organization, profile_id: profile.id), 
+                          method: :post, class: 'btn-warning btn-sm', 
+                          title: '重新发送审核通过邮件' %>
+                    </div>
                   </td>
                 </tr>
               <% end %>
