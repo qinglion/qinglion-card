@@ -44,16 +44,9 @@ class ProfileChatChannel < ApplicationCable::Channel
   private
 
   def find_or_create_chat_session
-    # Find active session or create new one
+    # Always create new session for each connection to avoid multiple tabs sharing same session
     visitor_name = params[:visitor_name].presence || 'Anonymous'
     visitor_email = params[:visitor_email]
-
-    active_session = @profile.chat_sessions.active
-      .where(visitor_name: visitor_name)
-      .order(started_at: :desc)
-      .first
-
-    return active_session if active_session
 
     @profile.chat_sessions.create!(
       visitor_name: visitor_name,

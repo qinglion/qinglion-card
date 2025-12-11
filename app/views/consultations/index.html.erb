@@ -36,6 +36,33 @@
   <!-- Messages Container -->
   <div class="flex-1 overflow-y-auto px-4 py-6" data-profile-chat-target="messages">
     <div class="container mx-auto max-w-3xl space-y-4">
+      <!-- Welcome Message -->
+      <div class="chat-message">
+        <div class="avatar avatar-sm flex-shrink-0">
+          <% if @profile.present? && @profile.avatar.attached? %>
+            <%= image_tag @profile.avatar, class: "w-full h-full rounded-full object-cover" %>
+          <% else %>
+            <div class="w-full h-full bg-primary/10 flex items-center justify-center rounded-full">
+              <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+              </svg>
+            </div>
+          <% end %>
+        </div>
+        <div class="chat-bubble chat-bubble-assistant">
+          <div class="text-sm prose prose-sm max-w-none">
+            <% if @profile.present? %>
+              <p>您好！我是<strong><%= @profile.full_name %></strong>的智能名片助手。</p>
+              <p>我可以帮您了解<%= @profile.full_name %>的专业背景和团队信息，或者为您推荐合适的专业人士。</p>
+              <p>请问有什么可以帮到您？</p>
+            <% else %>
+              <p>您好！我是智能咨询助手。</p>
+              <p>我可以帮您了解我们的团队和服务。请问有什么可以帮到您？</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
       <!-- Messages will be appended here dynamically -->
     </div>
   </div>
