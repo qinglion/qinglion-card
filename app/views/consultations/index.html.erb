@@ -1,68 +1,68 @@
-<div class="min-h-screen bg-surface flex items-center justify-center pb-20">
-  <div class="container mx-auto px-4 text-center">
-    <div class="max-w-2xl mx-auto">
-      <!-- AI Icon -->
-      <div class="mb-8">
-        <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary/10">
-          <svg class="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+<div class="min-h-screen bg-surface flex flex-col pb-16"
+     data-controller="profile-chat"
+     data-profile-chat-profile-id-value="<%= params[:profile_id] %>"
+     data-profile-chat-visitor-name-value="<%= params[:visitor_name] || 'Anonymous' %>"
+     data-profile-chat-visitor-email-value="<%= params[:visitor_email] %>">
+  
+  <!-- Header -->
+  <div class="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+    <div class="mx-auto max-w-3xl px-4 py-4">
+      <div class="flex items-center gap-3">
+        <%= link_to (@profile.present? ? card_path(@profile.slug) : root_path), class: "text-gray-600 dark:text-gray-400 hover:text-primary" do %>
+          
+        <% end %>
+        
+        <% if @profile.present? %>
+          <div class="flex items-center gap-3 flex-1">
+            <% if @profile.avatar.attached? %>
+              <%= image_tag @profile.avatar, class: "w-10 h-10 rounded-full object-cover" %>
+            <% else %>
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <span class="text-primary font-semibold"><%= @profile.full_name[0] %></span>
+              </div>
+            <% end %>
+            <div>
+              <h1 class="font-semibold text-on-surface"><%= @profile.full_name %></h1>
+              <p class="text-xs text-on-surface-variant"><%= @profile.title %></p>
+            </div>
+          </div>
+        <% else %>
+          <h1 class="font-semibold text-on-surface">AI 智能咨询</h1>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages Container -->
+  <div class="flex-1 overflow-y-auto px-4 py-6" data-profile-chat-target="messages">
+    <div class="container mx-auto max-w-3xl space-y-4">
+      <!-- Messages will be appended here dynamically -->
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="sticky bottom-16 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-4">
+    <div class="container mx-auto max-w-3xl">
+      <form data-profile-chat-target="form" data-action="submit->profile-chat#handleSubmit" class="flex gap-2">
+        <input
+          type="text"
+          data-profile-chat-target="input"
+          placeholder="输入您的问题..."
+          class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg 
+                 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
+                 bg-white dark:bg-gray-700 text-on-surface"
+          disabled>
+        <button
+          type="submit"
+          data-profile-chat-target="sendButton"
+          class="btn btn-primary px-6 py-3 rounded-lg flex items-center gap-2"
+          disabled>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
           </svg>
-        </div>
-      </div>
-
-      <!-- Title -->
-      <h1 class="text-4xl font-bold text-on-surface mb-4">
-        AI 智能咨询
-      </h1>
-
-      <!-- Description -->
-      <p class="text-lg text-on-surface-variant mb-8">
-        我们正在开发智能 AI 咨询功能，敬请期待
-      </p>
-
-      <!-- Features Preview -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-              <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-              </svg>
-            </div>
-            <h3 class="font-semibold text-on-surface mb-2">智能对话</h3>
-            <p class="text-sm text-on-surface-variant">24/7 在线智能问答</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-              <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
-            </div>
-            <h3 class="font-semibold text-on-surface mb-2">专业建议</h3>
-            <p class="text-sm text-on-surface-variant">基于专业知识的建议</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-              <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-              </svg>
-            </div>
-            <h3 class="font-semibold text-on-surface mb-2">快速响应</h3>
-            <p class="text-sm text-on-surface-variant">即时获取答案</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- CTA -->
-      <div class="inline-block px-8 py-3 bg-surface-variant/30 rounded-lg text-on-surface-variant">
-        功能开发中...
-      </div>
+          <span>发送</span>
+        </button>
+      </form>
     </div>
   </div>
 
@@ -70,7 +70,7 @@
   <nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50">
     <div class="container mx-auto px-4">
       <div class="flex justify-around items-center h-16">
-        <%= link_to (params[:profile_id].present? ? card_path(Profile.find(params[:profile_id]).slug) : root_path), class: "flex flex-col items-center justify-center flex-1 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
+        <%= link_to (@profile.present? ? card_path(@profile.slug) : root_path), class: "flex flex-col items-center justify-center flex-1 text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" do %>
           <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
           </svg>
@@ -94,3 +94,97 @@
     </div>
   </nav>
 </div>
+
+<style>
+  /* Chat message styles */
+  .chat-message {
+    display: flex;
+    gap: 0.75rem;
+    animation: slideIn 0.2s ease-out;
+  }
+
+  .chat-message-user {
+    justify-content: flex-end;
+  }
+
+  .chat-bubble {
+    max-width: 75%;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    word-wrap: break-word;
+  }
+
+  .chat-bubble-user {
+    background: hsl(var(--color-primary));
+    color: white;
+    border-bottom-right-radius: 0.25rem;
+    margin-left: auto;
+  }
+
+  .chat-bubble-assistant {
+    background: hsl(var(--color-surface-variant) / 0.5);
+    color: hsl(var(--color-on-surface));
+    border-bottom-left-radius: 0.25rem;
+  }
+
+  .avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .avatar-sm {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Member card styles */
+  .member-card {
+    margin: 0.75rem 0;
+    padding: 1rem;
+    border: 1px solid hsl(var(--color-outline) / 0.2);
+    border-radius: 0.75rem;
+    background: hsl(var(--color-surface));
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .member-card:hover {
+    border-color: hsl(var(--color-primary) / 0.3);
+    box-shadow: 0 2px 8px hsl(var(--color-primary) / 0.1);
+    transition: all 0.2s ease;
+  }
+
+  /* Tool call indicator */
+  .tool-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: hsl(var(--color-primary) / 0.1);
+    border-radius: 0.5rem;
+    color: hsl(var(--color-primary));
+    font-size: 0.875rem;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+</style>

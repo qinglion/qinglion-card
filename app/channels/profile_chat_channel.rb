@@ -34,8 +34,8 @@ class ProfileChatChannel < ApplicationCable::Channel
       }
     )
 
-    # Start AI response via background job
-    LlmStreamJob.perform_later(
+    # Start AI response with MCP tools via background job
+    ProfileAssistantStreamJob.perform_later(
       chat_session_id: @chat_session.id,
       prompt: data['content']
     )

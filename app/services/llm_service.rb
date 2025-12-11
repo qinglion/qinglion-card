@@ -42,7 +42,8 @@ class LlmService < ApplicationService
     end
 
     # Conversation history for multi-turn tool calls
-    @messages = []
+    # Initialize with provided history messages if any
+    @messages = options[:history] || []
   end
 
   # Default call - streaming if block given, blocking otherwise
@@ -334,12 +335,26 @@ class LlmService < ApplicationService
   end
 
   def build_request_body
+    # Extract system message for Claude compatibility
+    system_content = nil
+    filtered_messages = @messages.reject do |msg|
+      if msg[:role] == "system" || msg["role"] == "system"
+        system_content ||= msg[:content] || msg["content"]
+        true
+      else
+        false
+      end
+    end
+
     body = {
       model: @model,
-      messages: @messages,
+      messages: filtered_messages,
       temperature: @temperature,
       max_tokens: @max_tokens
     }
+
+    # Add system as separate parameter (Claude style)
+    body[:system] = system_content if system_content.present?
 
     # Add tools if available
     if @tools.present?
@@ -355,10 +370,19 @@ class LlmService < ApplicationService
 
   # Build initial messages from prompt, system, and images
   def build_initial_messages
-    return if @messages.present? # Already built
+    # If history is provided, system should already be in history
+    # Only add system if no history and system is provided
+    if @messages.empty? && @system.present?
+      @messages << { role: "system", content: @system }
+    elsif @messages.present? && @system.present?
+      # If history exists but no system message, prepend it
+      has_system = @messages.any? { |m| m[:role] == "system" || m["role"] == "system" }
+      unless has_system
+        @messages.unshift({ role: "system", content: @system })
+      end
+    end
 
-    @messages << { role: "system", content: @system } if @system.present?
-
+    # Add current user prompt
     if @images.present?
       user_content = []
       user_content << { type: "text", text: @prompt.to_s }
@@ -387,20 +411,17 @@ class LlmService < ApplicationService
         # Execute tool via handler
         result = @tool_handler.call(function_name, arguments)
 
-        # Add tool result to messages
+        # Add tool result as user message (Claude compatible)
+        # Claude doesn't support role: "tool", use user role with tool result format
         @messages << {
-          role: "tool",
-          tool_call_id: tool_id,
-          name: function_name,
-          content: result.to_json
+          role: "user",
+          content: "Tool result for #{function_name}: #{result.to_json}"
         }
       rescue => e
-        # Add error as tool result
+        # Add error as user message
         @messages << {
-          role: "tool",
-          tool_call_id: tool_id,
-          name: function_name,
-          content: { error: e.message }.to_json
+          role: "user",
+          content: "Tool error for #{function_name}: #{e.message}"
         }
         Rails.logger.error("Tool execution error: #{e.class} - #{e.message}")
       end

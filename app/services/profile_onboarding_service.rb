@@ -42,7 +42,7 @@ class ProfileOnboardingService < ApplicationService
     @profile = profile
     @message_content = message_content
     @current_step = current_step || @profile.onboarding_step || 'intro'
-    @llm_service = LlmService.new
+    # LlmService will be initialized when needed
   end
 
   def call

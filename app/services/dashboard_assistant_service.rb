@@ -2,7 +2,6 @@ class DashboardAssistantService < ApplicationService
   def initialize(profile, user_message)
     @profile = profile
     @user_message = user_message
-    @llm_service = LlmService.new
   end
 
   def call
@@ -10,15 +9,15 @@ class DashboardAssistantService < ApplicationService
     system_prompt = build_system_prompt
     
     # Process with AI - include function calling for profile updates
-    response = @llm_service.call(
+    response = LlmService.call_blocking(
       prompt: @user_message,
       system: system_prompt,
       temperature: 0.7
     )
 
     # Check if AI wants to update profile
-    if response[:content].include?('[UPDATE_PROFILE]')
-      extracted_updates = extract_profile_updates(response[:content])
+    if response.include?('[UPDATE_PROFILE]')
+      extracted_updates = extract_profile_updates(response)
       apply_profile_updates(extracted_updates)
       
       return {
@@ -31,7 +30,7 @@ class DashboardAssistantService < ApplicationService
 
     {
       success: true,
-      response: response[:content] || '我收到你的消息了！还有什么可以帮到你的吗？',
+      response: response || '我收到你的消息了！还有什么可以帮到你的吗？',
       updated: false
     }
   rescue StandardError => e
