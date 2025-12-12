@@ -45,14 +45,6 @@
             <% end %>
           </div>
           
-          <!-- Specializations Tags -->
-          <% if @profile.specializations_array.present? %>
-            <div class="flex flex-wrap gap-2 justify-center lg:justify-start mb-6">
-              <% @profile.specializations_array.each do |specialization| %>
-                <span class="badge-primary"><%= specialization %></span>
-              <% end %>
-            </div>
-          <% end %>
           
           <!-- Professional Stats -->
           <% if @profile.stats.present? && (@profile.stats['years_experience'].to_i > 0 || @profile.stats['cases_handled'].to_i > 0 || @profile.stats['clients_served'].to_i > 0 || @profile.stats['success_rate'].to_i > 0) %>

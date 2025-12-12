@@ -159,13 +159,6 @@
                   <p class="text-xs sm:text-sm text-muted mb-3 sm:mb-4"><%= profile.department %></p>
                 <% end %>
                 
-                <!-- Specializations -->
-                <div class="flex flex-wrap gap-2 justify-center mb-4 sm:mb-6">
-                  <% profile.specializations_array.take(3).each do |spec| %>
-                    <span class="badge-primary text-xs sm:text-sm"><%= spec %></span>
-                  <% end %>
-                </div>
-
                 <!-- Stats -->
                 <% if profile.stats.present? && (profile.stats['years_experience'].to_i > 0 || profile.stats['cases_handled'].to_i > 0) %>
                   <div class="bg-gradient-to-br from-surface-elevated to-surface rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
