@@ -130,6 +130,16 @@ class Admin::OrganizationsController < Admin::BaseController
   end
 
   def organization_params
-    params.require(:organization).permit(:name, :description, :logo, :background_image)
+    params.require(:organization).permit(
+      :name, :description, :logo, :background_image,
+      :service_advantage_1_title, :service_advantage_1_description,
+      :service_advantage_2_title, :service_advantage_2_description,
+      :service_advantage_3_title, :service_advantage_3_description,
+      :service_process_1_title, :service_process_1_description,
+      :service_process_2_title, :service_process_2_description,
+      :service_process_3_title, :service_process_3_description,
+      :service_process_4_title, :service_process_4_description,
+      :cta_title, :cta_description
+    )
   end
 end

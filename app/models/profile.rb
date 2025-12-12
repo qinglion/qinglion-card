@@ -33,6 +33,11 @@ class Profile < ApplicationRecord
   validates :phone, format: { with: /\A[0-9\-\(\)\+\s]+\z/ }, allow_blank: true
   validates :status, inclusion: { in: %w[pending approved rejected] }
 
+  # Scopes
+  scope :approved, -> { where(status: 'approved') }
+  scope :pending, -> { where(status: 'pending') }
+  scope :rejected, -> { where(status: 'rejected') }
+
   # Default stats structure
   after_initialize :set_default_stats, if: :new_record?
   after_initialize :set_default_onboarding_data, if: :new_record?

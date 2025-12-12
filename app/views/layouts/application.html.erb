@@ -9,11 +9,12 @@
     <meta http-equiv="cleartype" content="on">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
+    <% site_name = current_organization&.name || Rails.application.config.x.appname %>
     <title>
     <%- if content_for?(:title) %>
-      <%= yield(:title) + ' | ' + Rails.application.config.x.appname %>
+      <%= yield(:title) + ' | ' + site_name %>
     <%- else %>
-      <%= Rails.application.config.x.appname %>
+      <%= site_name %>
     <%- end %>
     </title>
     <%= csrf_meta_tags %>
@@ -31,8 +32,12 @@
         console.log('vConsole loaded - check bottom-right corner for debug panel');
       </script>
     <% end %>
-    <!-- Generate new favicon at `images/app-favicon.svg` at the first time, remove this line after generated  -->
-    <%= favicon_link_tag asset_path("app-favicon.svg") unless Rails.env.test? %>
+    <!-- Use organization logo as favicon if available, otherwise use default -->
+    <% if current_organization&.logo&.attached? %>
+      <%= favicon_link_tag url_for(current_organization.logo) unless Rails.env.test? %>
+    <% else %>
+      <%= favicon_link_tag asset_path("app-favicon.svg") unless Rails.env.test? %>
+    <% end %>
   </head>
   <body class="flex flex-col min-h-screen text-foreground <%= body_class %>">
     <main class="flex-1 flex flex-col bg-surface">

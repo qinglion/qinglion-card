@@ -10,6 +10,7 @@ import DashboardAssistantController from "./dashboard_assistant_controller"
 import WechatShareController from "./wechat_share_controller"
 import ImagePreviewController from "./image_preview_controller"
 import TeamInviteController from "./team_invite_controller"
+import BottomNavController from "./bottom_nav_controller"
 
 const application = Application.start()
 
@@ -23,5 +24,6 @@ application.register("dashboard-assistant", DashboardAssistantController)
 application.register("wechat-share", WechatShareController)
 application.register("image-preview", ImagePreviewController)
 application.register("team-invite", TeamInviteController)
+application.register("bottom-nav", BottomNavController)
 
 window.Stimulus = application

@@ -31,6 +31,27 @@ class DashboardsController < ApplicationController
     # Edit Profile model (name card information)
   end
 
+  def share_card
+    require 'rqrcode'
+    
+    # Generate share URL with profile_id
+    share_url = card_url(@profile.slug, profile_id: @profile.id)
+    
+    # Generate QR code
+    qrcode = RQRCode::QRCode.new(share_url)
+    
+    # Convert to SVG for display
+    @qr_svg = qrcode.as_svg(
+      color: '000',
+      shape_rendering: 'crispEdges',
+      module_size: 6,
+      standalone: true,
+      use_path: true
+    )
+    
+    @share_url = share_url
+  end
+
   def update_settings
     if @profile.update(profile_params)
       # If coming from onboarding, redirect back to onboarding

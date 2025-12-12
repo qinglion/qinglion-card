@@ -40,13 +40,17 @@ class ProfileAssistantStreamJob < ApplicationJob
       
       # 如果是推荐团队成员，广播名片信息
       if tool_name == 'recommend_team_member'
-        result_data = JSON.parse(result)
-        if result_data['success']
-          ActionCable.server.broadcast(channel_name, {
-            type: 'member-card',
-            profile: result_data['profile'],
-            reason: result_data['reason']
-          })
+        begin
+          result_data = JSON.parse(result)
+          if result_data['status'] == 'success' && result_data['action'] == 'recommend_member'
+            ActionCable.server.broadcast(channel_name, {
+              type: 'member-card',
+              profile: result_data['member'],
+              reason: result_data['reason']
+            })
+          end
+        rescue JSON::ParserError => e
+          Rails.logger.error("Failed to parse recommend result: #{e.message}")
         end
       end
 

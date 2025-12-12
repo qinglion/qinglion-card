@@ -405,23 +405,37 @@ class LlmService < ApplicationService
       arguments_json = tool_call.dig("function", "arguments")
 
       begin
-        # Parse arguments
-        arguments = JSON.parse(arguments_json)
+        # Parse arguments (handle both JSON string and Hash)
+        arguments = arguments_json.is_a?(String) ? JSON.parse(arguments_json) : arguments_json
 
         # Execute tool via handler
         result = @tool_handler.call(function_name, arguments)
 
-        # Add tool result as user message (Claude compatible)
-        # Claude doesn't support role: "tool", use user role with tool result format
+        # Format tool result properly
+        # Qwen models prefer structured JSON result
+        tool_result = result.is_a?(String) ? result : result.to_json
+
+        # Add tool result message
+        # Use role: "tool" with tool_call_id for OpenAI-compatible API
         @messages << {
-          role: "user",
-          content: "Tool result for #{function_name}: #{result.to_json}"
+          role: "tool",
+          tool_call_id: tool_id,
+          content: tool_result
         }
-      rescue => e
-        # Add error as user message
+      rescue JSON::ParserError => e
+        error_msg = "Failed to parse tool arguments: #{e.message}"
         @messages << {
-          role: "user",
-          content: "Tool error for #{function_name}: #{e.message}"
+          role: "tool",
+          tool_call_id: tool_id,
+          content: {error: error_msg}.to_json
+        }
+        Rails.logger.error("Tool JSON parse error: #{e.class} - #{e.message}")
+      rescue => e
+        error_msg = "Tool execution error: #{e.message}"
+        @messages << {
+          role: "tool",
+          tool_call_id: tool_id,
+          content: {error: error_msg}.to_json
         }
         Rails.logger.error("Tool execution error: #{e.class} - #{e.message}")
       end

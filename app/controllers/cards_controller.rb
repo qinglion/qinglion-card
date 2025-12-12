@@ -7,6 +7,12 @@ class CardsController < ApplicationController
     @case_studies = @profile.case_studies.limit(10)
     @honors = @profile.honors.limit(8)
     
+    # Track the share source profile (for WeChat share scenario)
+    @source_profile_id = params[:profile_id]
+    if @source_profile_id.present?
+      @source_profile = Profile.find_by(id: @source_profile_id)
+    end
+    
     # Generate absolute URL for WeChat share image
     @share_image_url = if @profile.avatar.attached?
       url_for(@profile.avatar)

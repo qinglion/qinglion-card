@@ -25,6 +25,10 @@ class UserMailer < ApplicationMailer
     @token = params[:token]
     @organization_name = params[:organization_name]
     
-    mail to: @user.email, subject: "[#{Rails.application.config.x.appname}] 您的申请已通过审核"
+    mail(
+      to: @user.email, 
+      subject: "[#{@organization_name}] 您的申请已通过审核",
+      from: "#{@organization_name} <notifications@#{ENV.fetch('EMAIL_SMTP_DOMAIN', 'example.com')}>"
+    )
   end
 end

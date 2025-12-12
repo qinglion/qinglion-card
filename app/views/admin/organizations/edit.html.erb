@@ -1,104 +1,277 @@
 <% content_for :title, "组织设置" %>
 
 <div class="container-md">
-  <!-- Page Title -->
+  <!-- Page Title with Description -->
   <div class="mb-6">
     <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-50">组织设置</h1>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+      配置组织信息，这些信息将展示在网站首页。组织名称将作为网站标题，组织 Logo 将作为网站图标（favicon）。
+    </p>
+  </div>
+
+  <!-- Info Alert -->
+  <div class="alert-info mb-6">
+    <div class="flex items-start">
+      <svg class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+      </svg>
+      <div class="flex-1">
+        <h3 class="font-semibold mb-1">关于组织信息展示</h3>
+        <ul class="text-sm space-y-1">
+          <li>• <strong>组织名称</strong>：显示在首页标题、浏览器标签、网站标题栏</li>
+          <li>• <strong>组织描述</strong>：显示在首页介绍区域，描述组织使命和价值</li>
+          <li>• <strong>组织 Logo</strong>：显示在首页顶部，同时作为浏览器 favicon 图标</li>
+          <li>• <strong>服务优势</strong>：展示组织的3个核心服务优势</li>
+          <li>• <strong>服务流程</strong>：展示组织的4个服务流程步骤</li>
+          <li>• <strong>行动号召</strong>：首页底部的号召行动文案</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <!-- Form -->
   <div class="card bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
     <div class="card-body">
-      <%= form_with model: [:admin, @organization], local: true, class: "space-y-6" do |form| %>
+      <%= form_with model: [:admin, @organization], local: true, class: "space-y-8" do |form| %>
         <%= render 'shared/form_error_message', model: @organization %>
 
-        <!-- Name -->
-        <div class="mb-4">
-          <%= form.label :name, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
-            Name<% if field_required?(@organization, :name) %> <span class="text-red-500">*</span><% end %>
-          <% end %>
-          <%= form.text_field :name, {
-            placeholder: "Enter name...",
-            class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
-          }.merge(field_required?(@organization, :name) ? { required: true } : {}) %>
-          <% if @organization.errors[:name].any? %>
-            <p class="text-sm text-red-500 mt-1"><%= @organization.errors[:name].first %></p>
-          <% end %>
-        </div>
-
-        <!-- Description -->
-        <div class="mb-4">
-          <%= form.label :description, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
-            Description<% if field_required?(@organization, :description) %> <span class="text-red-500">*</span><% end %>
-          <% end %>
-          <%= form.text_area :description, {
-            rows: 5,
-            placeholder: "Enter description...",
-            class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
-          }.merge(field_required?(@organization, :description) ? { required: true } : {}) %>
-          <% if @organization.errors[:description].any? %>
-            <p class="text-sm text-red-500 mt-1"><%= @organization.errors[:description].first %></p>
-          <% end %>
-        </div>
-
-        <!-- Logo -->
-        <div class="mb-4">
-          <%= form.label :logo, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
-            Logo
-          <% end %>
+        <!-- 基本信息 Section -->
+        <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-gray-50 mb-4">基本信息</h2>
           
-          <!-- Current attachments -->
-          <% if @organization.logo.attached? %>
-            <div class="mb-3 p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800">
-              <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current file:</p>
-              <div class="text-sm text-gray-600 dark:text-gray-400 flex items-center">
-                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
-                </svg>
-                <%= @organization.logo.filename %>
+          <!-- Name -->
+          <div class="mb-6">
+            <%= form.label :name, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
+              组织名称<% if field_required?(@organization, :name) %> <span class="text-red-500">*</span><% end %>
+            <% end %>
+            <%= form.text_field :name, {
+              placeholder: "例如：专业数字名片平台",
+              class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+            }.merge(field_required?(@organization, :name) ? { required: true } : {}) %>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              此名称将显示在首页大标题、浏览器标签页、网站标题栏、导航栏中
+            </p>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-6">
+            <%= form.label :description, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
+              组织描述<% if field_required?(@organization, :description) %> <span class="text-red-500">*</span><% end %>
+            <% end %>
+            <%= form.text_area :description, {
+              rows: 3,
+              placeholder: "例如：我们是一支专业的数字名片服务团队，致力于为每一位专业人士打造独特的数字形象...",
+              class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+            }.merge(field_required?(@organization, :description) ? { required: true } : {}) %>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              此描述将显示在首页顶部介绍区域
+            </p>
+          </div>
+
+          <!-- Logo -->
+          <div class="mb-6">
+            <%= form.label :logo, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
+              组织 Logo
+            <% end %>
+            
+            <% if @organization.logo.attached? %>
+              <div class="mb-3 p-4 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">当前 Logo：</p>
+                <div class="flex items-center space-x-4">
+                  <%= image_tag @organization.logo, class: "h-16 w-auto object-contain border border-gray-200 dark:border-gray-600 rounded p-2" %>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">
+                    <%= @organization.logo.filename %> (<%= number_to_human_size(@organization.logo.byte_size) %>)
+                  </div>
+                </div>
               </div>
-            </div>
-          <% end %>
-          
-          <%= form.file_field :logo, {
-            class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-          } %>
-          <p class="text-sm text-gray-500 mt-1">Select a new file to replace the current one, or leave empty to keep current file</p>
-          <% if @organization.errors[:logo].any? %>
-            <p class="text-sm text-red-500 mt-1"><%= @organization.errors[:logo].first %></p>
-          <% end %>
+            <% end %>
+            
+            <%= form.file_field :logo, {
+              accept: "image/*",
+              class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            } %>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              显示在首页顶部、导航栏，并作为浏览器 favicon。建议正方形透明背景 PNG/SVG，尺寸 512x512px
+            </p>
+          </div>
+
+          <!-- Background Image -->
+          <div class="mb-6">
+            <%= form.label :background_image, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
+              背景图片 <span class="text-gray-400 text-xs font-normal">(可选)</span>
+            <% end %>
+            
+            <% if @organization.background_image.attached? %>
+              <div class="mb-3 p-4 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">当前背景图：</p>
+                <%= image_tag @organization.background_image, class: "w-full max-w-md h-32 object-cover border border-gray-200 dark:border-gray-600 rounded mb-2" %>
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                  <%= @organization.background_image.filename %> (<%= number_to_human_size(@organization.background_image.byte_size) %>)
+                </div>
+              </div>
+            <% end %>
+            
+            <%= form.file_field :background_image, {
+              accept: "image/*",
+              class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            } %>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              用于首页装饰。建议高质量横版图片，尺寸 1920x1080px 或更大
+            </p>
+          </div>
         </div>
 
-        <!-- Background image -->
-        <div class="mb-4">
-          <%= form.label :background_image, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
-            Background image
-          <% end %>
+        <!-- 服务优势 Section -->
+        <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-gray-50 mb-2">服务优势</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">展示组织的3个核心服务优势，将显示在首页"我们的服务优势"区域</p>
           
-          <!-- Current attachments -->
-          <% if @organization.background_image.attached? %>
-            <div class="mb-3 p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800">
-              <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current file:</p>
-              <div class="text-sm text-gray-600 dark:text-gray-400 flex items-center">
-                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
-                </svg>
-                <%= @organization.background_image.filename %>
-              </div>
+          <!-- Advantage 1 -->
+          <div class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">服务优势 1</h3>
+            <div class="space-y-3">
+              <%= form.text_field :service_advantage_1_title, {
+                placeholder: "例如：专业团队",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+              <%= form.text_area :service_advantage_1_description, {
+                rows: 2,
+                placeholder: "例如：汇聚行业精英，每位成员都拥有丰富的专业经验和卓越的服务能力",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
             </div>
-          <% end %>
+          </div>
+
+          <!-- Advantage 2 -->
+          <div class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">服务优势 2</h3>
+            <div class="space-y-3">
+              <%= form.text_field :service_advantage_2_title, {
+                placeholder: "例如：智能服务",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+              <%= form.text_area :service_advantage_2_description, {
+                rows: 2,
+                placeholder: "例如：24小时AI智能助手，随时为客户解答疑问，智能匹配最合适的专业人士",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+            </div>
+          </div>
+
+          <!-- Advantage 3 -->
+          <div class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">服务优势 3</h3>
+            <div class="space-y-3">
+              <%= form.text_field :service_advantage_3_title, {
+                placeholder: "例如：品质保证",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+              <%= form.text_area :service_advantage_3_description, {
+                rows: 2,
+                placeholder: "例如：严格的服务标准和质量管理体系，确保每一次服务都超出预期",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- 服务流程 Section -->
+        <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-gray-50 mb-2">服务流程</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">展示组织的4个服务流程步骤，将显示在首页"服务流程"区域</p>
           
-          <%= form.file_field :background_image, {
-            class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-          } %>
-          <p class="text-sm text-gray-500 mt-1">Select a new file to replace the current one, or leave empty to keep current file</p>
-          <% if @organization.errors[:background_image].any? %>
-            <p class="text-sm text-red-500 mt-1"><%= @organization.errors[:background_image].first %></p>
-          <% end %>
+          <!-- Process 1 -->
+          <div class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">步骤 1</h3>
+            <div class="space-y-3">
+              <%= form.text_field :service_process_1_title, {
+                placeholder: "例如：了解需求",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+              <%= form.text_area :service_process_1_description, {
+                rows: 2,
+                placeholder: "例如：深入沟通，准确把握您的需求",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+            </div>
+          </div>
+
+          <!-- Process 2 -->
+          <div class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">步骤 2</h3>
+            <div class="space-y-3">
+              <%= form.text_field :service_process_2_title, {
+                placeholder: "例如：匹配专家",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+              <%= form.text_area :service_process_2_description, {
+                rows: 2,
+                placeholder: "例如：智能推荐最合适的团队成员",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+            </div>
+          </div>
+
+          <!-- Process 3 -->
+          <div class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">步骤 3</h3>
+            <div class="space-y-3">
+              <%= form.text_field :service_process_3_title, {
+                placeholder: "例如：专业服务",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+              <%= form.text_area :service_process_3_description, {
+                rows: 2,
+                placeholder: "例如：提供专业、高效的服务方案",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+            </div>
+          </div>
+
+          <!-- Process 4 -->
+          <div class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">步骤 4</h3>
+            <div class="space-y-3">
+              <%= form.text_field :service_process_4_title, {
+                placeholder: "例如：持续跟进",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+              <%= form.text_area :service_process_4_description, {
+                rows: 2,
+                placeholder: "例如：确保服务质量，持续优化体验",
+                class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+              } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- 行动号召 Section -->
+        <div class="pb-6">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-gray-50 mb-2">行动号召 (CTA)</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">展示在首页底部的号召行动文案</p>
+          
+          <div class="space-y-4">
+            <%= form.text_field :cta_title, {
+              placeholder: "例如：开始与我们合作",
+              class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+            } %>
+            <%= form.text_area :cta_description, {
+              rows: 2,
+              placeholder: "例如：立即联系我们，让专业团队为您提供优质服务",
+              class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
+            } %>
+          </div>
         </div>
 
         <!-- Form Actions -->
-        <div class="flex justify-end space-x-3">
+        <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
+          <a href="/" target="_blank" class="btn-outline-primary text-sm">
+            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/>
+              <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"/>
+            </svg>
+            预览首页效果
+          </a>
           <%= form.submit "保存设置", class: "btn-primary" %>
         </div>
       <% end %>

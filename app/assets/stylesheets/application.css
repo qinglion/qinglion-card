@@ -171,6 +171,52 @@
     @apply inline-flex items-center gap-2 px-4 py-2 bg-surface-elevated border border-border rounded-lg text-sm font-medium text-secondary transition-default hover:shadow-sm;
   }
 
+  /* Landing page button styles */
+  .btn-white {
+    @apply inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply px-4 py-2 text-sm;
+    background-color: hsl(0 0% 100%);
+    color: hsl(var(--color-primary));
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+  }
+
+  .btn-white:hover:not(:disabled) {
+    background-color: hsl(0 0% 95%);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .btn-white:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  .btn-outline-light {
+    @apply inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply px-4 py-2 text-sm;
+    background-color: transparent;
+    color: hsl(0 0% 100%);
+    border: 2px solid hsl(0 0% 100%);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+  }
+
+  .btn-outline-light:hover:not(:disabled) {
+    background-color: hsl(0 0% 100% / 0.15);
+    border-color: hsl(0 0% 100%);
+    transform: translateY(-1px);
+  }
+
+  .btn-outline-light:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
   /* Chat interface styles */
   .chat-container {
     @apply flex flex-col h-full bg-surface;

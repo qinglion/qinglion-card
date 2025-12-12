@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_10_073648) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_11_165630) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -221,6 +221,22 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_10_073648) do
     t.string "invite_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "service_advantage_1_title"
+    t.text "service_advantage_1_description"
+    t.string "service_advantage_2_title"
+    t.text "service_advantage_2_description"
+    t.string "service_advantage_3_title"
+    t.text "service_advantage_3_description"
+    t.string "service_process_1_title"
+    t.text "service_process_1_description"
+    t.string "service_process_2_title"
+    t.text "service_process_2_description"
+    t.string "service_process_3_title"
+    t.text "service_process_3_description"
+    t.string "service_process_4_title"
+    t.text "service_process_4_description"
+    t.string "cta_title"
+    t.text "cta_description"
     t.index ["admin_user_id"], name: "index_organizations_on_admin_user_id"
     t.index ["invite_token"], name: "index_organizations_on_invite_token", unique: true
   end

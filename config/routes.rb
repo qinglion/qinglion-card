@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       get :honors
       get :settings
       patch :settings, action: :update_settings
+      get :share_card
     end
   end
   # End routes for dashboards
