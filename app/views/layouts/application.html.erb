@@ -24,8 +24,8 @@
     <!-- Load error handler early to catch all errors -->
     <%= javascript_include_tag 'error_handler' if Rails.env.development? %>
     <%= javascript_include_tag 'application', type: "module" %>
-    <!-- vConsole for debugging (add ?vconsole=1 to URL to enable) -->
-    <% if Rails.env.development? || params[:vconsole] == '1' %>
+    <!-- vConsole for mobile debugging (add ?vconsole=1 to URL to enable) -->
+    <% if params[:vconsole] == '1' %>
       <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
       <script>
         var vConsole = new window.VConsole();
