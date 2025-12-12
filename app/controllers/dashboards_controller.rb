@@ -52,11 +52,6 @@ class DashboardsController < ApplicationController
     @share_url = share_url
   end
 
-  def regenerate_specializations
-    ExtractProfileSpecializationsJob.perform_later(@profile.id)
-    redirect_to settings_dashboards_path, notice: 'AI 正在分析您的资料并生成专业领域关键词，请稍后刷新查看结果。'
-  end
-
   def update_settings
     if @profile.update(profile_params)
       # Trigger AI extraction of specializations in background

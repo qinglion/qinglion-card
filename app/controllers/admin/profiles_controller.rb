@@ -1,5 +1,5 @@
 class Admin::ProfilesController < Admin::BaseController
-  before_action :set_profile, only: [:show, :edit, :update, :destroy]
+  before_action :set_profile, only: [:show, :edit, :update, :destroy, :regenerate_specializations]
 
   def index
     @profiles = Profile.page(params[:page]).per(10)
@@ -43,6 +43,11 @@ class Admin::ProfilesController < Admin::BaseController
     @profile.destroy
     user&.destroy
     redirect_to admin_profiles_path, notice: '个人资料和关联用户已成功删除'
+  end
+
+  def regenerate_specializations
+    ExtractProfileSpecializationsJob.perform_later(@profile.id)
+    redirect_to admin_profiles_path, notice: "正在为 #{@profile.full_name} 重新生成专业领域关键词，请稍后刷新查看结果。"
   end
 
   private
