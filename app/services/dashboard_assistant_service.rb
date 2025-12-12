@@ -102,7 +102,8 @@ class DashboardAssistantService < ApplicationService
     updates = JSON.parse(json_match[1])
     
     # Validate and clean updates
-    valid_fields = %w[full_name title company phone email location bio specializations]
+    # Note: specializations is auto-managed by ExtractProfileSpecializationsJob
+    valid_fields = %w[full_name title company phone email location bio]
     cleaned_updates = {}
 
     updates.each do |key, value|
@@ -110,8 +111,6 @@ class DashboardAssistantService < ApplicationService
         cleaned_updates['stats'] = value
       elsif valid_fields.include?(key)
         cleaned_updates[key] = value
-      elsif key == 'specializations' && value.is_a?(String)
-        cleaned_updates['specializations'] = value.split(/[,，、]/).map(&:strip).reject(&:blank?)
       end
     end
 
@@ -132,7 +131,10 @@ class DashboardAssistantService < ApplicationService
     end
 
     # Update profile
-    @profile.update(updates)
+    if @profile.update(updates)
+      # Trigger AI extraction of specializations in background
+      ExtractProfileSpecializationsJob.perform_later(@profile.id)
+    end
   rescue StandardError => e
     Rails.logger.error("Failed to apply profile updates: #{e.message}")
   end

@@ -68,35 +68,33 @@
   </div>
 
   <!-- Input Area -->
-  <div class="sticky bottom-16 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-4">
+  <div class="sticky bottom-16 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-3">
     <div class="container mx-auto max-w-3xl">
-      <form data-profile-chat-target="form" data-action="submit->profile-chat#handleSubmit" class="flex gap-2">
+      <form data-profile-chat-target="form" data-action="submit->profile-chat#handleSubmit" class="flex gap-2 items-end">
         <input
           type="text"
           data-profile-chat-target="input"
           placeholder="输入您的问题..."
-          class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg 
+          class="flex-1 px-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-2xl 
                  focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
-                 bg-white dark:bg-gray-700 text-on-surface"
+                 bg-white dark:bg-gray-700 text-on-surface text-sm sm:text-base"
           disabled>
         <button
           type="submit"
           data-profile-chat-target="sendButton"
-          class="send-button group relative px-6 py-3 rounded-xl flex items-center justify-center gap-2 
-                 font-medium text-white overflow-hidden transition-all duration-300 
-                 bg-gradient-to-r from-primary to-primary-variant
-                 hover:shadow-lg hover:shadow-primary/30 hover:scale-[1.02]
-                 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed 
+          class="send-button flex-shrink-0 w-10 h-10 sm:w-auto sm:h-auto sm:px-5 sm:py-2.5 
+                 rounded-full sm:rounded-xl flex items-center justify-center gap-2 
+                 font-medium text-white transition-all duration-200 border-0 outline-none
+                 bg-gradient-to-br from-primary via-primary to-primary-variant
+                 hover:shadow-lg hover:shadow-primary/30 hover:scale-105
+                 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed 
                  disabled:hover:scale-100 disabled:hover:shadow-none"
           disabled>
-          <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 
-                       translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></span>
-          <svg class="w-5 h-5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 
-                      transition-transform duration-300 relative z-10" 
-               fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+          <svg class="w-5 h-5 sm:w-4 sm:h-4" 
+               fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7"></path>
           </svg>
-          <span class="relative z-10">发送</span>
+          <span class="hidden sm:inline text-sm">发送</span>
         </button>
       </form>
     </div>

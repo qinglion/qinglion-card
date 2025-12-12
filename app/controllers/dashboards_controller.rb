@@ -54,6 +54,9 @@ class DashboardsController < ApplicationController
 
   def update_settings
     if @profile.update(profile_params)
+      # Trigger AI extraction of specializations in background
+      ExtractProfileSpecializationsJob.perform_later(@profile.id)
+      
       # If coming from onboarding, redirect back to onboarding
       if params[:from_onboarding]
         redirect_to onboardings_path, notice: '保存成功！继续完善信息或预览名片'
@@ -83,7 +86,6 @@ class DashboardsController < ApplicationController
       :service_process_3_title, :service_process_3_description,
       :service_process_4_title, :service_process_4_description,
       :cta_title, :cta_description,
-      specializations: [],
       stats: [:years_experience, :cases_handled, :clients_served, :success_rate]
     )
   end

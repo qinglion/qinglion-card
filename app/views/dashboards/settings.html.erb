@@ -137,29 +137,6 @@
             </div>
           </div>
 
-          <!-- Specializations -->
-          <div class="space-y-4">
-            <h2 class="text-xl font-semibold text-primary border-b border-border pb-2">专业领域</h2>
-            
-            <div id="specializations-container">
-              <% specializations = @profile.specializations_array %>
-              <% specializations = [''] if specializations.empty? %>
-              
-              <% specializations.each_with_index do |spec, index| %>
-                <div class="flex gap-2 mb-2">
-                  <%= text_field_tag "profile[specializations][]", spec, 
-                      class: "form-input flex-1", 
-                      placeholder: "例如：民事诉讼、心血管疾病、财产保险" %>
-                  <% if index > 0 %>
-                    <button type="button" class="btn-ghost" onclick="this.parentElement.remove()">删除</button>
-                  <% end %>
-                </div>
-              <% end %>
-            </div>
-            
-            <button type="button" class="btn-outline" onclick="addSpecialization()">+ 添加专业领域</button>
-          </div>
-
           <!-- Case Studies & Honors Management -->
           <div class="space-y-4">
             <h2 class="text-xl font-semibold text-primary border-b border-border pb-2">成功案例与荣誉认证</h2>
@@ -317,17 +294,6 @@
   </div>
 </div>
 
-<script>
-function addSpecialization() {
-  const container = document.getElementById('specializations-container');
-  const div = document.createElement('div');
-  div.className = 'flex gap-2 mb-2';
-  div.innerHTML = `
-    <input type="text" name="profile[specializations][]" class="form-input flex-1" placeholder="例如：民事诉讼、心血管疾病、财产保险">
-    <button type="button" class="btn-ghost" onclick="this.parentElement.remove()">删除</button>
-  `;
-  container.appendChild(div);
-}
-</script>
+
 
 <%= render 'shared/ai_assistant_widget' %>

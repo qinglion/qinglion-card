@@ -31,8 +31,12 @@ class ProfileAssistantService < ApplicationService
     case tool_name
     when 'get_profile_info'
       get_profile_info(profile, arguments)
+    when 'get_team_count'
+      get_team_count(profile, arguments)
     when 'get_team_members'
       get_team_members(profile, arguments)
+    when 'search_team_members'
+      search_team_members(profile, arguments)
     when 'recommend_team_member'
       recommend_team_member(profile, arguments)
     else
@@ -68,10 +72,19 @@ class ProfileAssistantService < ApplicationService
       - 执业年限：#{@profile.stats&.dig('years_experience') || 0}年
       - 成功案例：#{@profile.stats&.dig('cases_handled') || 0}个
 
-      # 工具使用
-      - `get_profile_info`: 获取详细个人信息（案例、荣誉）
-      - `get_team_members`: 查询团队成员（可按专业领域筛选）
-      - `recommend_team_member`: 推荐团队成员（会展示名片）
+      # 工具使用指南
+      1. `get_profile_info`: 获取当前专业人士的详细信息（案例、荣誉）
+      2. `get_team_count`: 获取团队总人数
+         - 用户问"有多少人"、"团队规模" → 使用此工具
+         - 可按专业领域统计：specialization="旅游"
+      3. `get_team_members`: 获取团队成员列表（默认5人，最多10人）
+         - 用户想看具体成员信息 → 使用此工具
+         - 可按专业领域筛选：specialization="金融"
+      4. `search_team_members`: 搜索团队成员
+         - 用户指定搜索关键词（姓名/职位/专业/部门） → 使用此工具
+         - 例如："有做旅游的吗" → keyword="旅游"
+      5. `recommend_team_member`: 推荐团队成员（会展示名片）
+         - 确定推荐人选后调用，展示可点击的名片
 
       # 重要原则
       1. 称呼#{@profile.full_name}使用职位"#{@profile.title}"，不要推断职业
@@ -79,6 +92,11 @@ class ProfileAssistantService < ApplicationService
       3. 不承诺服务能力，使用"擅长"、"有经验"等客观描述
       4. 不泄露私密联系方式，引导使用"联系 TA"按钮
       5. 遇到专业咨询，及时推荐合适的团队成员
+      6. 团队查询策略：
+         - 简单统计：使用 get_team_count
+         - 展示成员：使用 get_team_members
+         - 关键词搜索：使用 search_team_members
+         - 成员过多时，先显示前5-10人，提示可继续搜索
 
       # 回答风格
       简洁友好，使用Markdown格式，主动了解需求，及时推荐人选。
@@ -110,20 +128,57 @@ class ProfileAssistantService < ApplicationService
       {
         type: 'function',
         function: {
-          name: 'get_team_members',
-          description: '获取所属组织的团队成员列表，可以按专业领域筛选',
+          name: 'get_team_count',
+          description: '获取团队总人数和基本统计信息，不返回具体成员列表。当用户询问"有多少人"、"团队规模"等问题时使用。',
           parameters: {
             type: 'object',
             properties: {
               specialization: {
                 type: 'string',
-                description: '筛选特定专业领域的成员，根据用户的专业领域来筛选'
+                description: '可选：按专业领域筛选统计，例如"律师"、"会计师"等'
+              }
+            }
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'get_team_members',
+          description: '获取团队成员列表（返回前N名成员的详细信息）。用于展示具体成员信息。默认返回5人，最多10人。',
+          parameters: {
+            type: 'object',
+            properties: {
+              specialization: {
+                type: 'string',
+                description: '按专业领域筛选成员，例如"旅游"、"金融"、"法律"等关键词'
               },
               limit: {
                 type: 'integer',
-                description: '返回的成员数量限制，默认10'
+                description: '返回的成员数量，默认5人，最多10人'
               }
             }
+          }
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'search_team_members',
+          description: '搜索团队成员。根据关键词（姓名、职位、专业领域、部门）搜索匹配的成员。',
+          parameters: {
+            type: 'object',
+            properties: {
+              keyword: {
+                type: 'string',
+                description: '搜索关键词，可以是姓名、职位、专业领域或部门'
+              },
+              limit: {
+                type: 'integer',
+                description: '返回的结果数量，默认5人'
+              }
+            },
+            required: ['keyword']
           }
         }
       },
@@ -192,38 +247,128 @@ class ProfileAssistantService < ApplicationService
       result.to_json
     end
 
+    def get_team_count(profile, arguments)
+      unless profile.organization
+        return { status: 'error', message: '该专业人士暂未加入任何组织' }.to_json
+      end
+
+      members = profile.organization.approved_profiles.where.not(id: profile.id)
+      total_count = members.count
+      
+      # 按专业领域筛选统计
+      filtered_count = total_count
+      specialization = nil
+      if arguments['specialization'].present?
+        keyword = arguments['specialization']
+        specialization = keyword
+        filtered_members = members.select do |m|
+          m.specializations_array.any? { |s| s.downcase.include?(keyword.downcase) }
+        end
+        filtered_count = filtered_members.size
+      end
+
+      result = {
+        status: 'success',
+        total_count: total_count,
+        organization_name: profile.organization.name
+      }
+
+      if specialization
+        result[:filtered_count] = filtered_count
+        result[:specialization] = specialization
+        result[:message] = "#{profile.organization.name}共有#{total_count}名成员，其中#{specialization}相关的有#{filtered_count}人"
+      else
+        result[:message] = "#{profile.organization.name}共有#{total_count}名团队成员"
+      end
+
+      result.to_json
+    end
+
     def get_team_members(profile, arguments)
       unless profile.organization
         return { status: 'error', message: '该专业人士暂未加入任何组织' }.to_json
       end
 
       members = profile.organization.approved_profiles.where.not(id: profile.id)
+      total_count = members.count
       
       # 按专业领域筛选
       if arguments['specialization'].present?
         keyword = arguments['specialization']
         members = members.select do |m|
-          m.specializations_array.any? { |s| s.include?(keyword) }
+          m.specializations_array.any? { |s| s.downcase.include?(keyword.downcase) }
         end
       end
 
-      limit = [arguments['limit'] || 5, 10].min  # 限制最多10个
-      members = members.first(limit)
+      limit = [arguments['limit'] || 5, 10].min
+      displayed_members = members.first(limit)
 
       result = {
         status: 'success',
-        count: members.size,
-        members: members.map do |member|
+        total_count: total_count,
+        displayed_count: displayed_members.size,
+        has_more: members.size > limit,
+        members: displayed_members.map do |member|
           {
             id: member.id,
             full_name: member.full_name,
             title: member.title,
             department: member.department || '未设置',
-            specializations: member.specializations_array.first(3),  # 最多3个领域
+            specializations: member.specializations_array.first(3),
             years_experience: member.stats&.dig('years_experience') || 0
           }
         end
       }
+
+      result.to_json
+    end
+
+    def search_team_members(profile, arguments)
+      unless profile.organization
+        return { status: 'error', message: '该专业人士暂未加入任何组织' }.to_json
+      end
+
+      keyword = arguments['keyword']
+      unless keyword.present?
+        return { status: 'error', message: '请提供搜索关键词' }.to_json
+      end
+
+      members = profile.organization.approved_profiles.where.not(id: profile.id)
+      keyword_lower = keyword.downcase
+      
+      # 多字段搜索：姓名、职位、专业领域、部门
+      matched_members = members.select do |m|
+        m.full_name.downcase.include?(keyword_lower) ||
+        m.title.to_s.downcase.include?(keyword_lower) ||
+        m.department.to_s.downcase.include?(keyword_lower) ||
+        m.specializations_array.any? { |s| s.downcase.include?(keyword_lower) }
+      end
+
+      limit = [arguments['limit'] || 5, 10].min
+      displayed_members = matched_members.first(limit)
+
+      result = {
+        status: 'success',
+        keyword: keyword,
+        total_matches: matched_members.size,
+        displayed_count: displayed_members.size,
+        members: displayed_members.map do |member|
+          {
+            id: member.id,
+            full_name: member.full_name,
+            title: member.title,
+            department: member.department || '未设置',
+            specializations: member.specializations_array.first(3),
+            years_experience: member.stats&.dig('years_experience') || 0
+          }
+        end
+      }
+
+      if matched_members.empty?
+        result[:message] = "没有找到与\"#{keyword}\"相关的团队成员"
+      elsif matched_members.size > limit
+        result[:message] = "找到#{matched_members.size}个匹配结果，显示前#{limit}个"
+      end
 
       result.to_json
     end
