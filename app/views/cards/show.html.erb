@@ -56,29 +56,29 @@
           
           <!-- Professional Stats -->
           <% if @profile.stats.present? && (@profile.stats['years_experience'].to_i > 0 || @profile.stats['cases_handled'].to_i > 0 || @profile.stats['clients_served'].to_i > 0 || @profile.stats['success_rate'].to_i > 0) %>
-            <div class="inline-flex flex-wrap gap-4 justify-center lg:justify-start p-4 bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl">
+            <div class="flex gap-2 sm:gap-4 justify-center lg:justify-start p-3 sm:p-4 bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl overflow-x-auto">
               <% if @profile.stats['years_experience'].to_i > 0 %>
-                <div class="text-center px-3">
-                  <div class="text-2xl font-bold text-white"><%= @profile.stats['years_experience'] %><span class="text-base">年</span></div>
-                  <div class="text-xs text-white/80 mt-1">从业经验</div>
+                <div class="text-center px-2 sm:px-3 flex-shrink-0">
+                  <div class="text-xl sm:text-2xl font-bold text-white whitespace-nowrap"><%= @profile.stats['years_experience'] %><span class="text-sm sm:text-base">年</span></div>
+                  <div class="text-xs text-white/80 mt-1 whitespace-nowrap">从业经验</div>
                 </div>
               <% end %>
               <% if @profile.stats['cases_handled'].to_i > 0 %>
-                <div class="text-center px-3 border-l border-white/30">
-                  <div class="text-2xl font-bold text-white"><%= @profile.stats['cases_handled'] %><span class="text-base">+</span></div>
-                  <div class="text-xs text-white/80 mt-1">服务案例</div>
+                <div class="text-center px-2 sm:px-3 border-l border-white/30 flex-shrink-0">
+                  <div class="text-xl sm:text-2xl font-bold text-white whitespace-nowrap"><%= @profile.stats['cases_handled'] %><span class="text-sm sm:text-base">+</span></div>
+                  <div class="text-xs text-white/80 mt-1 whitespace-nowrap">服务案例</div>
                 </div>
               <% end %>
               <% if @profile.stats['clients_served'].to_i > 0 %>
-                <div class="text-center px-3 border-l border-white/30">
-                  <div class="text-2xl font-bold text-white"><%= @profile.stats['clients_served'] %><span class="text-base">+</span></div>
-                  <div class="text-xs text-white/80 mt-1">服务客户</div>
+                <div class="text-center px-2 sm:px-3 border-l border-white/30 flex-shrink-0">
+                  <div class="text-xl sm:text-2xl font-bold text-white whitespace-nowrap"><%= @profile.stats['clients_served'] %><span class="text-sm sm:text-base">+</span></div>
+                  <div class="text-xs text-white/80 mt-1 whitespace-nowrap">服务客户</div>
                 </div>
               <% end %>
               <% if @profile.stats['success_rate'].to_i > 0 %>
-                <div class="text-center px-3 border-l border-white/30">
-                  <div class="text-2xl font-bold text-white"><%= @profile.stats['success_rate'] %><span class="text-base">%</span></div>
-                  <div class="text-xs text-white/80 mt-1">成功率</div>
+                <div class="text-center px-2 sm:px-3 border-l border-white/30 flex-shrink-0">
+                  <div class="text-xl sm:text-2xl font-bold text-white whitespace-nowrap"><%= @profile.stats['success_rate'] %><span class="text-sm sm:text-base">%</span></div>
+                  <div class="text-xs text-white/80 mt-1 whitespace-nowrap">成功率</div>
                 </div>
               <% end %>
             </div>
