@@ -88,7 +88,7 @@
       <section class="card overflow-hidden">
         <div class="relative">
           <% if @profile.background_image.attached? %>
-            <div class="aspect-w-16 aspect-h-6 lg:aspect-h-9 bg-surface-elevated">
+            <div class="hidden aspect-w-16 aspect-h-6 lg:aspect-h-9 bg-surface-elevated">
               <%= image_tag @profile.background_image, 
                   class: 'w-full h-full object-cover',
                   alt: "关于#{@profile.full_name}" %>
