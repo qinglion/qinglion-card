@@ -62,9 +62,9 @@ class DashboardsController < ApplicationController
       
       # If coming from onboarding, redirect back to onboarding
       if params[:from_onboarding]
-        redirect_to onboardings_path, notice: '保存成功！继续完善信息或预览名片'
+        redirect_to onboardings_path
       else
-        redirect_to dashboards_path, notice: '名片信息更新成功'
+        redirect_to settings_dashboards_path
       end
     else
       if params[:from_onboarding]
