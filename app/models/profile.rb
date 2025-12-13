@@ -29,6 +29,7 @@ class Profile < ApplicationRecord
   has_many :honors, dependent: :destroy
   has_many :chat_sessions, dependent: :destroy
   has_many :chat_messages, through: :chat_sessions
+  has_many :renewals, dependent: :destroy
   
   has_one_attached :avatar
   has_one_attached :background_image

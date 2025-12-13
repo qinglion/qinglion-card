@@ -1,64 +1,75 @@
 class Admin::MemberCategoriesController < Admin::BaseController
-  before_action :set_categories, only: [:index, :update]
+  before_action :set_profile, only: [:update]
 
   def index
-    # 获取所有类别及其统计信息
-    @categories = Profile::MEMBER_CATEGORIES.map do |category|
-      {
-        name: category,
-        count: Profile.where(member_category: category).count
-      }
+    # 获取所有成员，支持筛选和搜索
+    @profiles = Profile.includes(:user)
+                      .order(created_at: :desc)
+    
+    # 按类别筛选
+    if params[:category].present?
+      if params[:category] == 'uncategorized'
+        @profiles = @profiles.where(member_category: nil)
+      else
+        @profiles = @profiles.where(member_category: params[:category])
+      end
     end
     
+    # 搜索功能
+    if params[:search].present?
+      search_term = "%#{params[:search]}%"
+      @profiles = @profiles.where(
+        "full_name LIKE ? OR email LIKE ? OR title LIKE ?",
+        search_term, search_term, search_term
+      )
+    end
+    
+    @profiles = @profiles.page(params[:page]).per(20)
+    
+    # 统计信息
     @total_members = Profile.count
     @categorized_members = Profile.where.not(member_category: nil).count
     @uncategorized_members = Profile.where(member_category: nil).count
+    
+    # 类别列表
+    @categories = Profile::MEMBER_CATEGORIES
   end
 
   def update
-    category = params[:category]
-    action = params[:action_type]
+    new_category = params[:member_category]
     
-    # 验证类别是否存在
-    unless Profile::MEMBER_CATEGORIES.include?(category)
-      return render json: { success: false, error: '无效的类别' }, status: :unprocessable_entity
+    # 允许设置为空（清除类别）
+    if new_category == ''
+      new_category = nil
+    elsif new_category.present? && !Profile::MEMBER_CATEGORIES.include?(new_category)
+      flash[:alert] = '无效的类别'
+      redirect_to admin_member_categories_path and return
     end
     
-    case action
-    when 'add'
-      new_category = params[:new_category]&.strip
-      if new_category.blank?
-        return render json: { success: false, error: '类别名称不能为空' }, status: :unprocessable_entity
+    if @profile.update(member_category: new_category)
+      # 使用 Turbo Stream 更新页面
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "profile_category_#{@profile.id}",
+            partial: "admin/member_categories/category_badge",
+            locals: { profile: @profile }
+          )
+        end
+        format.html do
+          flash[:notice] = '类别已更新'
+          redirect_to admin_member_categories_path(page: params[:page], category: params[:filter_category], search: params[:search])
+        end
       end
-      
-      if Profile::MEMBER_CATEGORIES.include?(new_category)
-        return render json: { success: false, error: '类别已存在' }, status: :unprocessable_entity
-      end
-      
-      # 添加新类别到常量（需要修改模型文件）
-      render json: { success: false, error: '添加类别功能需要修改代码实现' }, status: :unprocessable_entity
-      
-    when 'remove'
-      # 检查是否有成员使用此类别
-      count = Profile.where(member_category: category).count
-      if count > 0
-        return render json: { 
-          success: false, 
-          error: "无法删除：还有 #{count} 个成员使用此类别，请先修改这些成员的类别" 
-        }, status: :unprocessable_entity
-      end
-      
-      # 删除类别（需要修改模型文件）
-      render json: { success: false, error: '删除类别功能需要修改代码实现' }, status: :unprocessable_entity
-      
     else
-      render json: { success: false, error: '无效的操作' }, status: :unprocessable_entity
+      flash[:alert] = '更新失败'
+      redirect_to admin_member_categories_path(page: params[:page], category: params[:filter_category], search: params[:search])
     end
   end
 
   private
 
-  def set_categories
-    @categories = Profile::MEMBER_CATEGORIES
+  def set_profile
+    @profile = Profile.find(params[:id])
   end
 end
