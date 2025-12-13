@@ -2,7 +2,7 @@
 <div class="min-h-screen bg-surface"
      data-controller="wechat-share"
      data-wechat-share-title-value="<%= @profile.full_name %>"
-     data-wechat-share-desc-value="<%= @profile.bio&.truncate(100) || '专业名片分享' %>"
+     data-wechat-share-desc-value="<%= @profile.title || '专业名片分享' %>"
      data-wechat-share-link-value="<%= request.original_url %>"
      data-wechat-share-img-url-value="<%= @share_image_url %>">
   
@@ -14,7 +14,7 @@
         <div class="flex-shrink-0">
           <div class="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-4 border-white shadow-xl">
             <% if @profile.avatar.attached? %>
-              <%= image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover" %>
+              <%= optimized_image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover", size: [400, 400], eager: true %>
             <% elsif @profile.avatar_url.present? %>
               <img src="<%= @profile.avatar_url %>" 
                    alt="<%= @profile.full_name %>" 
@@ -89,9 +89,10 @@
         <div class="relative">
           <% if @profile.background_image.attached? %>
             <div class="hidden aspect-w-16 aspect-h-6 lg:aspect-h-9 bg-surface-elevated">
-              <%= image_tag @profile.background_image, 
+              <%= optimized_image_tag @profile.background_image, 
                   class: 'w-full h-full object-cover',
-                  alt: "关于#{@profile.full_name}" %>
+                  alt: "关于#{@profile.full_name}",
+                  size: [1200, 600] %>
             </div>
           <% else %>
             <!-- Decorative gradient when no image -->

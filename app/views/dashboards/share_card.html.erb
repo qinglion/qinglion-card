@@ -14,7 +14,7 @@
           <div class="flex items-center gap-4 mb-6 pb-6 border-b border-border">
             <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-primary/20">
               <% if @profile.avatar.attached? %>
-                <%= image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover" %>
+                <%= optimized_image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover", size: [200, 200] %>
               <% elsif @profile.avatar_url.present? %>
                 <img src="<%= @profile.avatar_url %>" alt="<%= @profile.full_name %>" class="w-full h-full object-cover">
               <% else %>

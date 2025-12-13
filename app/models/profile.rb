@@ -2,6 +2,15 @@ class Profile < ApplicationRecord
   extend FriendlyId
   friendly_id :slug_candidates, use: :slugged
   
+  # Member category constants
+  MEMBER_CATEGORIES = [
+    '终身卡',
+    '年度会员',
+    '课次会员',
+    '预科',
+    '读书会'
+  ].freeze
+  
   def slug_candidates
     [
       :email_username,
@@ -32,6 +41,7 @@ class Profile < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_blank: true
   validates :phone, format: { with: /\A[0-9\-\(\)\+\s]+\z/ }, allow_blank: true
   validates :status, inclusion: { in: %w[pending approved rejected] }
+  validates :member_category, inclusion: { in: MEMBER_CATEGORIES }, allow_blank: true
 
   # Scopes
   scope :approved, -> { where(status: 'approved') }

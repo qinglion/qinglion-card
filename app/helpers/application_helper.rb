@@ -109,4 +109,27 @@ module ApplicationHelper
       super
     end
   end
+
+  # Optimized image tag with lazy loading and responsive variants
+  def optimized_image_tag(source, options = {})
+    return '' if source.blank?
+    
+    # Extract size options for variant generation
+    size = options.delete(:size) || [800, 800]
+    eager = options.delete(:eager) || false
+    
+    # Set default options for optimization
+    options[:loading] ||= eager ? 'eager' : 'lazy'
+    options[:decoding] ||= 'async'
+    
+    # Handle ActiveStorage attachments
+    if source.is_a?(ActiveStorage::Attached::One) && source.attached?
+      # Generate optimized variant
+      variant_source = source.variant(resize_to_limit: size)
+      image_tag(variant_source, options)
+    else
+      # Handle URLs or other sources
+      image_tag(source, options)
+    end
+  end
 end

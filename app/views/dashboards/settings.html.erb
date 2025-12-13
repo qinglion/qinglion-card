@@ -22,7 +22,7 @@
                 <div class="mb-4">
                   <div class="flex items-center gap-4">
                     <div class="avatar avatar-lg">
-                      <%= image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover" %>
+                      <%= optimized_image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover", size: [200, 200] %>
                     </div>
                     <div class="text-sm text-secondary">
                       当前头像
