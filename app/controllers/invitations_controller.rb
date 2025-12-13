@@ -48,7 +48,7 @@ class InvitationsController < ApplicationController
   def user_params
     params.require(:user).permit(
       :email,
-      profile_attributes: [:full_name, :title, :department, :bio, :avatar]
+      profile_attributes: [:full_name, :title, :bio, :avatar]
     )
   end
 end
