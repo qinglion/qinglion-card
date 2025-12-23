@@ -1,77 +1,46 @@
-<div class="min-h-screen bg-surface py-4 sm:py-8">
+<div class="min-h-screen bg-surface py-6 sm:py-8">
   <div class="container-xl mx-auto px-4">
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-lg mx-auto">
       <!-- Header -->
-      <div class="mb-6 sm:mb-8 text-center">
-        <h1 class="text-2xl sm:text-3xl font-bold text-primary mb-2">分享名片</h1>
-        <p class="text-sm sm:text-base text-secondary">扫描二维码或长按图片分享您的名片</p>
+      <div class="mb-6 text-center">
+        <h1 class="text-2xl sm:text-3xl font-bold text-primary mb-2">分享自己</h1>
+        <p class="text-sm text-secondary">长按识别二维码分享</p>
       </div>
 
       <!-- QR Code Card -->
       <div class="card">
-        <div class="card-body text-center px-4 sm:px-6">
+        <div class="card-body text-center p-6">
           <!-- Profile Info -->
-          <div class="flex items-center justify-center gap-3 sm:gap-4 mb-6">
-            <div class="avatar avatar-lg flex-shrink-0">
+          <div class="flex items-center gap-4 mb-6 pb-6 border-b border-border">
+            <div class="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 border-2 border-primary/20">
               <% if @profile.avatar.attached? %>
-                <%= image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover" %>
+                <%= optimized_image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover", size: [200, 200] %>
               <% elsif @profile.avatar_url.present? %>
                 <img src="<%= @profile.avatar_url %>" alt="<%= @profile.full_name %>" class="w-full h-full object-cover">
               <% else %>
-                <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary text-2xl font-bold">
+                <div class="w-full h-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold">
                   <%= @profile.full_name.first %>
                 </div>
               <% end %>
             </div>
             <div class="text-left flex-1 min-w-0">
-              <h3 class="text-base sm:text-lg font-semibold text-primary truncate"><%= @profile.full_name %></h3>
-              <p class="text-sm sm:text-base text-secondary truncate"><%= @profile.title %></p>
+              <h3 class="text-lg font-bold text-primary mb-1"><%= @profile.full_name %></h3>
+              <p class="text-sm text-secondary line-clamp-2"><%= @profile.title %></p>
             </div>
           </div>
 
           <!-- QR Code -->
-          <div class="bg-white p-4 sm:p-8 rounded-lg inline-block mb-6 max-w-full">
-            <div class="w-full max-w-[280px] sm:max-w-none mx-auto">
-              <%= @qr_svg.html_safe %>
-            </div>
-          </div>
-
-          <!-- Share URL -->
-          <div class="mb-6">
-            <p class="text-sm text-secondary mb-2">分享链接：</p>
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 justify-center" data-controller="clipboard">
-              <input 
-                type="text" 
-                value="<%= @share_url %>" 
-                readonly
-                class="form-input text-sm flex-1 w-full sm:max-w-md"
-                data-clipboard-target="source"
-              >
-              <button 
-                type="button"
-                class="btn-primary whitespace-nowrap"
-                data-action="click->clipboard#copy"
-              >
-                复制
-              </button>
+          <div class="flex justify-center mb-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+              <img src="data:image/png;base64,<%= @qr_png_base64 %>" 
+                   alt="名片二维码" 
+                   class="block"
+                   style="width: 280px; height: auto; image-rendering: pixelated;" />
             </div>
           </div>
 
           <!-- Instructions -->
-          <div class="bg-surface p-4 rounded-lg text-left">
-            <h4 class="font-semibold text-primary mb-2">使用说明：</h4>
-            <ul class="space-y-2 text-sm text-secondary">
-              <li>• 使用微信扫一扫功能扫描二维码即可打开名片</li>
-              <li>• 在微信中长按二维码图片可识别并分享</li>
-              <li>• 点击复制按钮可复制分享链接</li>
-              <li>• 分享链接包含您的个人标识，便于追踪分享来源</li>
-            </ul>
-          </div>
-
-          <!-- Back Button -->
-          <div class="mt-6">
-            <%= link_to "返回Dashboard", dashboards_path, class: "btn-outline" %>
-          </div>
+          
         </div>
       </div>
     </div>

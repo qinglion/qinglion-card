@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_12_050328) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_13_103504) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -278,10 +278,22 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_12_050328) do
     t.text "service_process_4_description"
     t.string "cta_title"
     t.text "cta_description"
+    t.string "member_category"
     t.index ["organization_id"], name: "index_profiles_on_organization_id"
     t.index ["slug"], name: "index_profiles_on_slug", unique: true
     t.index ["status"], name: "index_profiles_on_status"
     t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "renewals", force: :cascade do |t|
+    t.bigint "profile_id", null: false
+    t.date "payment_date", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["profile_id", "payment_date"], name: "index_renewals_on_profile_id_and_payment_date"
+    t.index ["profile_id"], name: "index_renewals_on_profile_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -311,5 +323,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_12_050328) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "admin_oplogs", "administrators"
+  add_foreign_key "renewals", "profiles"
   add_foreign_key "sessions", "users"
 end

@@ -250,6 +250,33 @@
     @apply border-t border-border p-4 bg-surface;
   }
 
+  /* Image Fallback Styles - 防止图片加载失败缓存 */
+  .image-load-failed {
+    opacity: 0.3;
+    filter: grayscale(100%);
+  }
+
+  .image-fallback-placeholder {
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  img[data-controller~="image-fallback"] {
+    transition: opacity 0.3s ease;
+  }
+
+  img[data-controller~="image-fallback"].loading {
+    opacity: 0.6;
+  }
+
 } /* End of @layer components */
 
 @tailwind utilities;

@@ -45,27 +45,19 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <%= profile_form.label :title, class: "form-label" do %>
-                头衔 <span class="text-error">*</span>
-              <% end %>
-              <%= profile_form.text_field :title, required: true, class: "form-input", placeholder: "例如：主任医师" %>
-            </div>
-
-            <div>
-              <%= profile_form.label :department, class: "form-label" do %>
-                类别
-              <% end %>
-              <%= profile_form.text_field :department, class: "form-input", placeholder: "例如：专家" %>
-            </div>
+          <div>
+            <%= profile_form.label :title, class: "form-label" do %>
+              让别人一句话记住我 <span class="text-error">*</span>
+            <% end %>
+            <p class="text-muted text-sm mb-2">将显示在名字下方，例如：主任医师 | 20年临床经验的心血管专家</p>
+            <%= profile_form.text_field :title, required: true, class: "form-input", placeholder: "请输入您的专业头衔和特色亮点" %>
           </div>
 
           <div>
             <%= profile_form.label :bio, class: "form-label" do %>
-              个人简介
+              为什么选择我？（WHY - 我的使命与价值主张）
             <% end %>
-            <%= profile_form.text_area :bio, rows: 4, class: "form-input", placeholder: "介绍您的专业背景、研究方向、擅长领域等..." %>
+            <%= profile_form.text_area :bio, rows: 4, class: "form-input", placeholder: "阐述您的核心价值、使命愿景、为什么客户应该选择您...例如：我致力于通过专业的医学知识和丰富的临床经验，为每一位患者提供个性化的诊疗方案" %>
           </div>
         <% end %>
 

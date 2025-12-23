@@ -40,15 +40,18 @@ class DashboardsController < ApplicationController
     # Generate QR code
     qrcode = RQRCode::QRCode.new(share_url)
     
-    # Convert to SVG for display
-    @qr_svg = qrcode.as_svg(
-      color: '000',
-      shape_rendering: 'crispEdges',
-      module_size: 6,
-      standalone: true,
-      use_path: true
+    # Convert to PNG (rqrcode includes chunky_png as dependency)
+    png = qrcode.as_png(
+      bit_depth: 1,
+      border_modules: 4,
+      color: 'black',
+      fill: 'white',
+      module_px_size: 6,
+      size: 280
     )
     
+    # Convert PNG to base64 for embedding in HTML
+    @qr_png_base64 = Base64.strict_encode64(png.to_s)
     @share_url = share_url
   end
 
@@ -59,9 +62,9 @@ class DashboardsController < ApplicationController
       
       # If coming from onboarding, redirect back to onboarding
       if params[:from_onboarding]
-        redirect_to onboardings_path, notice: '保存成功！继续完善信息或预览名片'
+        redirect_to onboardings_path
       else
-        redirect_to dashboards_path, notice: '名片信息更新成功'
+        redirect_to settings_dashboards_path
       end
     else
       if params[:from_onboarding]

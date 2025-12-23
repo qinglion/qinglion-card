@@ -144,7 +144,7 @@
                 <!-- Avatar -->
                 <div class="avatar avatar-lg sm:avatar-xl mx-auto mb-3 sm:mb-4 ring-4 ring-primary/10 group-hover:ring-primary/30 transition-all">
                   <% if profile.avatar.attached? %>
-                    <%= image_tag profile.avatar, alt: profile.full_name, class: "w-full h-full object-cover" %>
+                    <%= optimized_image_tag profile.avatar, alt: profile.full_name, class: "w-full h-full object-cover", size: [200, 200] %>
                   <% else %>
                     <div class="w-full h-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">
                       <%= profile.full_name.first %>
