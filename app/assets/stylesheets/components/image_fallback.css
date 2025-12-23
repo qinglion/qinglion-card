@@ -1,0 +1,28 @@
+/* 图片加载失败样式 */
+.image-load-failed {
+  opacity: 0.3;
+  filter: grayscale(100%);
+}
+
+/* 图片占位符动画 */
+.image-fallback-placeholder {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 图片加载中状态（可选） */
+img[data-controller~="image-fallback"] {
+  transition: opacity 0.3s ease;
+}
+
+img[data-controller~="image-fallback"].loading {
+  opacity: 0.6;
+}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_13_103504) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_23_013946) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -279,6 +279,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_13_103504) do
     t.string "cta_title"
     t.text "cta_description"
     t.string "member_category"
+    t.text "case_studies_text"
+    t.text "honors_text"
+    t.text "testimonials"
     t.index ["organization_id"], name: "index_profiles_on_organization_id"
     t.index ["slug"], name: "index_profiles_on_slug", unique: true
     t.index ["status"], name: "index_profiles_on_status"
