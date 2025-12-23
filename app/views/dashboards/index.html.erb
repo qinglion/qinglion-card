@@ -2,47 +2,12 @@
   <div class="container-xl mx-auto px-4">
     <!-- Header -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-primary mb-2">我的Dashboard</h1>
-      <p class="text-secondary">管理您的专业名片和查看咨询统计</p>
+      
+      
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-      <div class="card">
-        <div class="card-body text-center">
-          <div class="text-3xl font-bold text-primary mb-1"><%= @stats[:total_chats] %></div>
-          <div class="text-sm text-secondary">总咨询次数</div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-body text-center">
-          <div class="text-3xl font-bold text-warning mb-1"><%= @stats[:active_chats] %></div>
-          <div class="text-sm text-secondary">进行中咨询</div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-body text-center">
-          <div class="text-3xl font-bold text-info mb-1"><%= @stats[:total_messages] %></div>
-          <div class="text-sm text-secondary">总消息数</div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-body text-center">
-          <div class="text-3xl font-bold text-success mb-1"><%= @stats[:case_studies_count] %></div>
-          <div class="text-sm text-secondary">案例数量</div>
-        </div>
-      </div>
-      
-      <div class="card">
-        <div class="card-body text-center">
-          <div class="text-3xl font-bold text-primary mb-1"><%= @stats[:honors_count] %></div>
-          <div class="text-sm text-secondary">荣誉资质</div>
-        </div>
-      </div>
-    </div>
+    
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <!-- Profile Quick Info -->
@@ -54,7 +19,7 @@
           <div class="flex items-center gap-4 mb-4">
             <div class="avatar avatar-lg">
               <% if @profile.avatar.attached? %>
-                <%= image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover" %>
+                <%= optimized_image_tag @profile.avatar, alt: @profile.full_name, class: "w-full h-full object-cover", size: [200, 200], eager: true %>
               <% elsif @profile.avatar_url.present? %>
                 <img src="<%= @profile.avatar_url %>" alt="<%= @profile.full_name %>" class="w-full h-full object-cover">
               <% else %>
@@ -83,63 +48,10 @@
       </div>
 
       <!-- Recent Chats -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="text-xl font-bold text-primary">最近咨询</h2>
-        </div>
-        <div class="card-body">
-          <% if @recent_chat_sessions.any? %>
-            <div class="space-y-4">
-              <% @recent_chat_sessions.each do |session| %>
-                <div class="border-l-4 border-primary pl-4">
-                  <h4 class="font-semibold text-secondary"><%= session.visitor_name %></h4>
-                  <p class="text-sm text-muted">
-                    <%= session.started_at.strftime("%Y-%m-%d %H:%M") %>
-                    <% if session.ended_at %>
-                      - <%= session.ended_at.strftime("%H:%M") %>
-                      <span class="badge-success ml-2">已结束</span>
-                    <% else %>
-                      <span class="badge-warning ml-2">进行中</span>
-                    <% end %>
-                  </p>
-                  <p class="text-sm text-secondary mt-1">
-                    消息数：<%= session.chat_messages.count %>
-                  </p>
-                </div>
-              <% end %>
-            </div>
-          <% else %>
-            <p class="text-secondary text-center py-8">暂无咨询记录</p>
-          <% end %>
-        </div>
-      </div>
+      
     </div>
 
     <!-- Quick Actions -->
-    <div class="card mt-8">
-      <div class="card-header">
-        <h2 class="text-xl font-bold text-primary">快捷操作</h2>
-      </div>
-      <div class="card-body">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <%= link_to case_studies_dashboards_path, class: "btn-outline text-center" do %>
-            <div class="text-lg font-semibold mb-2">管理案例</div>
-            <div class="text-sm text-muted">添加或编辑您的成功案例</div>
-          <% end %>
-          
-          <%= link_to honors_dashboards_path, class: "btn-outline text-center" do %>
-            <div class="text-lg font-semibold mb-2">管理荣誉</div>
-            <div class="text-sm text-muted">添加或编辑您的荣誉资质</div>
-          <% end %>
-          
-          <%= link_to settings_dashboards_path, class: "btn-outline text-center" do %>
-            <div class="text-lg font-semibold mb-2">名片设置</div>
-            <div class="text-sm text-muted">修改名片信息和展示内容</div>
-          <% end %>
-        </div>
-      </div>
-    </div>
+    
   </div>
 </div>
-
-<%= render 'shared/ai_assistant_widget' %>

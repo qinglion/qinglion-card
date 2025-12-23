@@ -109,4 +109,40 @@ module ApplicationHelper
       super
     end
   end
+
+  # Optimized image tag with lazy loading and responsive variants
+  def optimized_image_tag(source, options = {})
+    return '' if source.blank?
+    
+    # Extract size options for variant generation
+    size = options.delete(:size) || [800, 800]
+    eager = options.delete(:eager) || false
+    enable_fallback = options.delete(:enable_fallback) != false  # 默认启用失败重试
+    
+    # Set default options for optimization
+    options[:loading] ||= eager ? 'eager' : 'lazy'
+    options[:decoding] ||= 'async'
+    
+    # Add image fallback controller for retry on failure
+    if enable_fallback
+      controllers = options.dig(:data, :controller) || ''
+      controllers = controllers.to_s.split(' ').push('image-fallback').uniq.join(' ')
+      options[:data] ||= {}
+      options[:data][:controller] = controllers
+      # Set retry parameters
+      options[:data][:image_fallback_max_retries_value] ||= 3
+      options[:data][:image_fallback_retry_delay_value] ||= 1000
+      options[:data][:image_fallback_fallback_text_value] ||= '图片加载失败'
+    end
+    
+    # Handle ActiveStorage attachments
+    if source.is_a?(ActiveStorage::Attached::One) && source.attached?
+      # Generate optimized variant
+      variant_source = source.variant(resize_to_limit: size)
+      image_tag(variant_source, options)
+    else
+      # Handle URLs or other sources
+      image_tag(source, options)
+    end
+  end
 end

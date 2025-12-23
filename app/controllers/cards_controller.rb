@@ -4,8 +4,10 @@ class CardsController < ApplicationController
   def show
     @full_render = true  # Hide navbar for card view
     @profile = Profile.friendly.find(params[:id])
-    @case_studies = @profile.case_studies.limit(10)
-    @honors = @profile.honors.limit(8)
+    
+    # Parse text fields into arrays
+    @case_studies = parse_text_to_list(@profile.case_studies_text)
+    @honors = parse_text_to_list(@profile.honors_text)
     
     # Track the share source profile (for WeChat share scenario)
     @source_profile_id = params[:profile_id]
@@ -32,5 +34,9 @@ class CardsController < ApplicationController
   end
 
   private
-  # Write your private methods here
+  
+  def parse_text_to_list(text)
+    return [] if text.blank?
+    text.split("\n").map(&:strip).reject(&:blank?)
+  end
 end

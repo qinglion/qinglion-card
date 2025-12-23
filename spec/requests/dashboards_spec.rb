@@ -36,7 +36,7 @@ RSpec.describe "Dashboards", type: :request do
           bio: 'Updated bio'
         }
       }
-      expect(response).to redirect_to(dashboards_path)
+      expect(response).to redirect_to(settings_dashboards_path)
       expect(profile.reload.full_name).to eq('Updated Name')
     end
 

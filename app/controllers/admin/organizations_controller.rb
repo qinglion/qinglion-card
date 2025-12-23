@@ -13,9 +13,29 @@ class Admin::OrganizationsController < Admin::BaseController
   end
 
   def members
-    @pending_profiles = @organization.pending_profiles.page(params[:pending_page]).per(10)
-    @approved_profiles = @organization.approved_profiles.page(params[:approved_page]).per(10)
-    @rejected_profiles = @organization.rejected_profiles.page(params[:rejected_page]).per(10)
+    # Base scopes
+    pending_scope = @organization.pending_profiles
+    approved_scope = @organization.approved_profiles
+    rejected_scope = @organization.rejected_profiles
+    
+    # Filter by category if specified
+    if params[:category].present?
+      @selected_category = params[:category]
+      pending_scope = pending_scope.where(member_category: @selected_category)
+      approved_scope = approved_scope.where(member_category: @selected_category)
+      rejected_scope = rejected_scope.where(member_category: @selected_category)
+    end
+    
+    # Filter by status if specified
+    if params[:status] == 'uncategorized'
+      pending_scope = pending_scope.where(member_category: nil)
+      approved_scope = approved_scope.where(member_category: nil)
+      rejected_scope = rejected_scope.where(member_category: nil)
+    end
+    
+    @pending_profiles = pending_scope.page(params[:pending_page]).per(10)
+    @approved_profiles = approved_scope.page(params[:approved_page]).per(10)
+    @rejected_profiles = rejected_scope.page(params[:rejected_page]).per(10)
   end
 
   def approve_member

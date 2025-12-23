@@ -54,7 +54,7 @@ module Myapp
     config.active_job.queue_adapter = :good_job
 
     # Use vips for Active Storage variants
-    config.active_storage.variant_processor = :vips
+    config.active_storage.variant_processor = :mini_magick
 
     # Use custom MailDeliveryJob that inherits from ApplicationJob
     config.action_mailer.delivery_job = "MailDeliveryJob"
