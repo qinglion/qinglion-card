@@ -33,8 +33,10 @@ class Profile < ApplicationRecord
   
   has_one_attached :avatar
   has_one_attached :background_image
+  has_one_attached :cta_qrcode
 
   serialize :specializations, coder: JSON
+  serialize :testimonials, coder: JSON
 
   validates :full_name, presence: true
   validates :title, presence: true

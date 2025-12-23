@@ -5,7 +5,7 @@ RSpec.describe "Admin::Renewals", type: :request do
   let(:profile) { create(:profile) }
 
   before do
-    admin_sign_in_as(admin)
+    sign_in_admin(admin)
   end
 
   describe "GET /admin/renewals" do
