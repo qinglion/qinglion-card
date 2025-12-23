@@ -6,6 +6,8 @@
         <%= link_to root_path, class: "flex items-center space-x-3" do %>
           <% if current_organization&.logo&.attached? %>
             <%= image_tag current_organization.logo, alt: current_organization.name, class: "h-10 w-auto" %>
+          <% else %>
+            <%= image_tag "logo.png", alt: "人脉主页", class: "h-10 w-auto" %>
           <% end %>
           <span class="text-2xl font-bold text-primary">
             <%= current_organization&.name || Rails.application.config.x.appname %>
@@ -18,7 +20,8 @@
         <% if user_signed_in? %>
           <%= render 'shared/user_dropdown' %>
         <% else %>
-          <%= link_to "登录", sign_in_path, class: "btn-primary" %>
+          <%= link_to "注册", sign_up_path, class: "btn-primary" %>
+          <%= link_to "登录", sign_in_path, class: "btn-ghost" %>
         <% end %>
       </div>
     </div>

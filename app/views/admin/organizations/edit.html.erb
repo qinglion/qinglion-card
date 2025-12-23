@@ -45,7 +45,7 @@
               组织名称<% if field_required?(@organization, :name) %> <span class="text-red-500">*</span><% end %>
             <% end %>
             <%= form.text_field :name, {
-              placeholder: "例如：专业数字名片平台",
+              placeholder: "例如：人脉主页",
               class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
             }.merge(field_required?(@organization, :name) ? { required: true } : {}) %>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -60,7 +60,7 @@
             <% end %>
             <%= form.text_area :description, {
               rows: 3,
-              placeholder: "例如：我们是一支专业的数字名片服务团队，致力于为每一位专业人士打造独特的数字形象...",
+              placeholder: "例如：基于黄金圈理念，为每位伙伴构建可在微信生态传播的个人品牌页面...",
               class: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-50"
             }.merge(field_required?(@organization, :description) ? { required: true } : {}) %>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">

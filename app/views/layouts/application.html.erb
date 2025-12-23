@@ -36,7 +36,7 @@
     <% if current_organization&.logo&.attached? %>
       <%= favicon_link_tag url_for(current_organization.logo) unless Rails.env.test? %>
     <% else %>
-      <%= favicon_link_tag asset_path("app-favicon.svg") unless Rails.env.test? %>
+      <%= favicon_link_tag asset_path("logo.png") unless Rails.env.test? %>
     <% end %>
   </head>
   <body class="flex flex-col min-h-screen text-foreground <%= body_class %>">

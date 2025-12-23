@@ -17,8 +17,8 @@ if Organization.count.zero?
   end
 
   org = Organization.create!(
-    name: '默认组织',
-    description: '系统默认组织',
+    name: '人脉主页',
+    description: '基于黄金圈理念，为每位伙伴构建可在微信生态传播的个人品牌页面',
     admin_user: admin_user
   )
 

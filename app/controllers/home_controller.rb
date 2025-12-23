@@ -5,11 +5,11 @@ class HomeController < ApplicationController
     # 获取主组织信息（假设系统中只有一个组织，或者获取第一个）
     @organization = Organization.first
     
-    # 如果没有组织，创建默认组织
+    # 如果没有组织，创建默认的人脉主页
     unless @organization
       @organization = Organization.create!(
-        name: Rails.application.config.x.appname || 'Professional Digital Cards',
-        description: '专业数字名片平台，让每一位专业人士拥有自己的智能数字名片'
+        name: Rails.application.config.x.appname || '人脉主页',
+        description: '基于黄金圈理念，为每位伙伴构建可在微信生态传播的个人品牌页面'
       )
     end
     

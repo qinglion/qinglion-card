@@ -31,7 +31,7 @@ bundle exec rake organization:init
 
 This command will:
 - Create an organization if one doesn't exist
-- Use default values: name='默认组织', description='系统默认组织'
+- Use default values: name='人脉主页', description='基于黄金圈理念，为每位伙伴构建可在微信生态传播的个人品牌页面'
 - Display organization details including invite token
 
 #### Show Organization Details

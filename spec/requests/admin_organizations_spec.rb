@@ -32,7 +32,7 @@ RSpec.describe "Admin::Organizations", type: :request do
 
   describe "POST /admin/organization/members/:profile_id/reactivate" do
     it "moves rejected member back to pending status" do
-      organization = Organization.first_or_create!(name: '默认组织')
+      organization = Organization.first_or_create!(name: '人脉主页')
       profile = create(:profile, organization: organization, status: 'rejected')
       
       post reactivate_member_admin_organization_path(profile_id: profile.id)
@@ -44,7 +44,7 @@ RSpec.describe "Admin::Organizations", type: :request do
 
   describe "DELETE /admin/organization/members/:profile_id/destroy" do
     it "permanently deletes a member" do
-      organization = Organization.first_or_create!(name: '默认组组')
+      organization = Organization.first_or_create!(name: '人脉主页')
       profile = create(:profile, organization: organization, status: 'rejected')
       
       expect {
@@ -56,7 +56,7 @@ RSpec.describe "Admin::Organizations", type: :request do
   end
 
   describe "POST /admin/organization/members/:profile_id/resend_email" do
-    let(:organization) { Organization.first_or_create!(name: '默认组织') }
+    let(:organization) { Organization.first_or_create!(name: '人脉主页') }
     
     it "resends approval email to approved member" do
       user = create(:user)
@@ -99,7 +99,7 @@ RSpec.describe "Admin::Organizations", type: :request do
   end
 
   describe "POST /admin/organization/add_user" do
-    let(:organization) { Organization.first_or_create!(name: '默认组织') }
+    let(:organization) { Organization.first_or_create!(name: '人脉主页') }
     
     it "adds a user to approved members by email" do
       user = create(:user)

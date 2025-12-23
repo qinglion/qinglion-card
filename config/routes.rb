@@ -54,15 +54,18 @@ Rails.application.routes.draw do
   get  "sign_in", to: "sessions#new"
   post "sign_in", to: "sessions#create"
   delete 'sign_out', to: 'sessions#destroy', as: :sign_out
-  # Disabled: Only allow registration through invitation
-  # get  "sign_up", to: "registrations#new"
-  # post "sign_up", to: "registrations#create"
+  # Registration enabled - new users need approval to join community
+  get  "sign_up", to: "registrations#new"
+  post "sign_up", to: "registrations#create"
+  get  "pending_approval", to: "registrations#pending_approval"
   resource :session, only: [:new, :show, :destroy] do
     get :devices, on: :member
     delete :destroy_one, on: :member
   end
-  # Disabled: Only allow registration through invitation
-  # resources :registrations, only: [:new, :create]
+  # Registration enabled - new users need approval
+  resources :registrations, only: [:new, :create] do
+    get :pending_approval, on: :collection
+  end
   resource  :password, only: [:edit, :update]
 
   namespace :identity do
