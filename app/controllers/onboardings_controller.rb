@@ -5,7 +5,7 @@ class OnboardingsController < ApplicationController
   def index
     # Redirect to dashboard if onboarding is already completed
     if @profile.onboarding_completed
-      redirect_to dashboards_path, notice: '您的名片已经设置完成！'
+      redirect_to settings_dashboards_path, notice: '您的名片已经设置完成！'
       return
     end
   end
@@ -15,7 +15,7 @@ class OnboardingsController < ApplicationController
       onboarding_completed: true,
       onboarding_step: 'skipped'
     )
-    redirect_to dashboards_path, notice: '已跳过名片设置，您可以稍后在设置中完善信息。'
+    redirect_to settings_dashboards_path, notice: '已跳过名片设置，您可以稍后在设置中完善信息。'
   end
 
   private

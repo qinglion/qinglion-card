@@ -34,10 +34,10 @@
    * Use semantic variables only for maintainability and theme consistency.
    */
   :root {
-    /* Professional purple primary - modern and innovative */
-    --color-primary: 245 87% 64%;
-    --color-primary-light: 245 80% 75%;
-    --color-primary-dark: 245 90% 55%;
+    /* Professional deep blue primary - authoritative and trustworthy for legal professionals */
+    --color-primary: 212 53% 25%;
+    --color-primary-light: 212 45% 35%;
+    --color-primary-dark: 212 60% 18%;
 
     /* Professional gray secondary - sophistication */
     --color-secondary: 220 15% 35%;
@@ -93,9 +93,9 @@
    */
   .dark {
     /* Adjusted primary for dark background readability */
-    --color-primary: 245 87% 70%;
-    --color-primary-light: 245 80% 80%;
-    --color-primary-dark: 245 90% 60%;
+    --color-primary: 212 65% 55%;
+    --color-primary-light: 212 60% 65%;
+    --color-primary-dark: 212 70% 45%;
 
     /* Gray tones for dark mode */
     --color-secondary: 220 15% 70%;

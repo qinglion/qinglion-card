@@ -3,20 +3,8 @@ class DashboardsController < ApplicationController
   before_action :set_profile
 
   def index
-    # Redirect to onboarding if profile is not completed
-    if @profile.needs_onboarding?
-      redirect_to onboardings_path
-      return
-    end
-
-    @recent_chat_sessions = @profile.chat_sessions.recent.limit(10)
-    @stats = {
-      total_chats: @profile.chat_sessions.count,
-      active_chats: @profile.chat_sessions.active.count,
-      total_messages: @profile.chat_messages.count,
-      case_studies_count: @profile.case_studies.count,
-      honors_count: @profile.honors.count
-    }
+    # Redirect directly to settings page
+    redirect_to settings_dashboards_path
   end
 
   def case_studies

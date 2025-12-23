@@ -20,8 +20,12 @@
       </p>
       
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-xs sm:max-w-none mx-auto px-4">
-        <%= link_to "浏览人脉主页", "#profiles", class: "btn-white btn-lg sm:btn-xl whitespace-nowrap" %>
-        <%= link_to "了解核心优势", "#services", class: "btn-outline-light btn-lg sm:btn-xl whitespace-nowrap" %>
+        <% if current_user %>
+          <%= link_to "编辑人脉主页", settings_dashboards_path, class: "btn-white btn-lg sm:btn-xl whitespace-nowrap" %>
+        <% else %>
+          <%= link_to "浏览人脉主页", "#profiles", class: "btn-white btn-lg sm:btn-xl whitespace-nowrap" %>
+          <%= link_to "了解核心优势", "#services", class: "btn-outline-light btn-lg sm:btn-xl whitespace-nowrap" %>
+        <% end %>
       </div>
     </div>
   </section>
@@ -241,16 +245,12 @@
       
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 max-w-xs sm:max-w-none mx-auto px-4">
         <% if current_user %>
-          <%= link_to "进入工作台", dashboards_path, class: "btn-white btn-lg sm:btn-xl shadow-lg hover:shadow-xl transition-all whitespace-nowrap" %>
+          <%= link_to "编辑人脉主页", settings_dashboards_path, class: "btn-white btn-lg sm:btn-xl shadow-lg hover:shadow-xl transition-all whitespace-nowrap" %>
         <% else %>
           <%= link_to "立即注册", sign_up_path, class: "btn-white btn-lg sm:btn-xl shadow-lg hover:shadow-xl transition-all whitespace-nowrap" %>
           <%= link_to "已有账号？登录", sign_in_path, class: "btn-outline-light btn-lg sm:btn-xl whitespace-nowrap" %>
         <% end %>
       </div>
-
-      <p class="text-white/70 text-xs sm:text-sm">
-        💡 提示：如需加入团队，请联系管理员获取邀请链接
-      </p>
     </div>
   </section>
   
