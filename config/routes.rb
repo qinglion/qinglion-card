@@ -118,8 +118,6 @@ Rails.application.routes.draw do
       post 'members/:profile_id/resend_email', action: :resend_approval_email, as: :resend_email_member, on: :member
       post :add_user, on: :member
     end
-    resources :member_categories, only: [:index, :update]
-    resources :renewals, only: [:index, :new, :create, :destroy]
     resources :honors
     resources :case_studies
     resources :profiles do

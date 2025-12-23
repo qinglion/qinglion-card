@@ -1,8 +1,15 @@
 <div class="min-h-screen bg-surface flex flex-col pb-16"
-     data-controller="profile-chat"
+     data-controller="profile-chat wechat-share"
      data-profile-chat-profile-id-value="<%= params[:profile_id] %>"
      data-profile-chat-visitor-name-value="<%= params[:visitor_name] || 'Anonymous' %>"
-     data-profile-chat-visitor-email-value="<%= params[:visitor_email] %>">
+     data-profile-chat-visitor-email-value="<%= params[:visitor_email] %>"
+     <% if @profile.present? %>
+     data-wechat-share-title-value="<%= @profile.full_name %> - AI智能咨询"
+     data-wechat-share-desc-value="与我在线交流，了解更多专业服务"
+     data-wechat-share-link-value="<%= request.original_url %>"
+     data-wechat-share-img-url-value="<%= @share_image_url %>"
+     <% end %>
+     >
   
   <!-- Header -->
   <div class="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
