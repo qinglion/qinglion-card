@@ -112,19 +112,7 @@ Rails.application.routes.draw do
 
   # Do not write business logic at admin dashboard
   namespace :admin do
-    resource :organization, only: [:edit, :update] do
-      get :members, on: :member
-      post 'members/:profile_id/approve', action: :approve_member, as: :approve_member, on: :member
-      post 'members/:profile_id/reject', action: :reject_member, as: :reject_member, on: :member
-      post 'members/:profile_id/reactivate', action: :reactivate_member, as: :reactivate_member, on: :member
-      delete 'members/:profile_id/destroy', action: :destroy_member, as: :destroy_member, on: :member
-      post 'members/:profile_id/resend_email', action: :resend_approval_email, as: :resend_email_member, on: :member
-      post :add_user, on: :member
-    end
-    resources :honors
-    resources :case_studies
-    resources :member_categories, only: [:index, :update]
-    resources :renewals
+
     resources :profiles do
       post :regenerate_specializations, on: :member
     end

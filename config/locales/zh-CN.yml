@@ -27,8 +27,6 @@ zh-CN:
       system_title: "系统"
       dashboard: "仪表盘"
       profiles: "个人资料"
-      case_studies: "案例研究"
-      honors: "荣誉奖项"
       organizations: "组织管理"
       administrators: "管理员"
       operation_logs: "操作日志"
@@ -77,30 +75,6 @@ zh-CN:
       no_profiles: "暂无个人资料"
       get_started: "开始创建新的个人资料"
       confirm_delete: "确定要删除此个人资料吗？"
-      
-    # 案例研究管理
-    case_studies:
-      title: "案例研究管理"
-      new: "新建案例"
-      case_title: "标题"
-      category: "分类"
-      profile: "相关资料"
-      date: "日期"
-      no_case_studies: "暂无案例研究"
-      get_started: "开始创建新的案例研究"
-      confirm_delete: "确定要删除此案例研究吗？"
-      
-    # 荣誉奖项管理
-    honors:
-      title: "荣誉奖项管理"
-      new: "新建荣誉"
-      honor_title: "标题"
-      organization: "颁发机构"
-      profile: "获奖者"
-      date: "获奖日期"
-      no_honors: "暂无荣誉奖项"
-      get_started: "开始创建新的荣誉奖项"
-      confirm_delete: "确定要删除此荣誉奖项吗？"
       
     # 组织管理
     organizations:
