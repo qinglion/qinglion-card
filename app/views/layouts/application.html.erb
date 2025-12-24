@@ -16,7 +16,9 @@
     <meta name="MobileOptimized" content="320">
     <% site_name = Rails.application.config.x.appname %>
     <title>
-    <%- if content_for?(:title) %>
+    <%- if content_for?(:full_title) %>
+      <%= yield(:title) %>
+    <%- elsif content_for?(:title) %>
       <%= yield(:title) + ' | ' + site_name %>
     <%- else %>
       <%= site_name %>
