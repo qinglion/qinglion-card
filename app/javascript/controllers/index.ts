@@ -12,6 +12,8 @@ import ImagePreviewController from "./image_preview_controller"
 import ImageFallbackController from "./image_fallback_controller"
 import TeamInviteController from "./team_invite_controller"
 import BottomNavController from "./bottom_nav_controller"
+import PwaInstallController from "./pwa_install_controller"
+import PushNotificationsController from "./push_notifications_controller"
 
 const application = Application.start()
 
@@ -27,5 +29,7 @@ application.register("image-preview", ImagePreviewController)
 application.register("image-fallback", ImageFallbackController)
 application.register("team-invite", TeamInviteController)
 application.register("bottom-nav", BottomNavController)
+application.register("pwa-install", PwaInstallController)
+application.register("push-notifications", PushNotificationsController)
 
 window.Stimulus = application

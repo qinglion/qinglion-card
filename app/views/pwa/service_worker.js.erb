@@ -1,0 +1,171 @@
+const CACHE_VERSION = 'v1';
+const CACHE_NAME = `人脉主页-pwa-${CACHE_VERSION}`;
+const CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+const STATIC_CACHE_URLS = [
+  '<%= asset_path("application.css") %>',
+  '<%= asset_path("application.js") %>',
+  '<%= asset_path("app-favicon.svg") %>',
+  '<%= asset_path("logo.png") %>'
+];
+
+// Install event - cache static assets
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(STATIC_CACHE_URLS))
+      .then(() => self.skipWaiting())
+  );
+});
+
+// Activate event - clean up old caches
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames
+          .filter(cacheName => cacheName.startsWith('人脉主页-pwa-') && cacheName !== CACHE_NAME)
+          .map(cacheName => caches.delete(cacheName))
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Network-first strategy for HTML pages
+// Cache-first strategy for static assets
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  const url = new URL(event.request.url);
+  const isHTMLPage = event.request.headers.get('accept')?.includes('text/html');
+
+  // Network-first for HTML pages (always get fresh content)
+  if (isHTMLPage) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => response)
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // Cache-first for static assets
+  event.respondWith(
+    caches.match(event.request)
+      .then(cachedResponse => {
+        // Return cached response if found and not expired
+        if (cachedResponse) {
+          const cacheDate = new Date(cachedResponse.headers.get('date'));
+          const now = new Date();
+          if (now - cacheDate < CACHE_MAX_AGE) {
+            return cachedResponse;
+          }
+        }
+
+        // Fetch from network
+        return fetch(event.request)
+          .then(response => {
+            // Only cache successful responses for static assets
+            if (response && response.status === 200 && response.type === 'basic') {
+              const responseToCache = response.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => cache.put(event.request, responseToCache));
+            }
+            return response;
+          })
+          .catch(() => cachedResponse); // Fallback to cached response if network fails
+      })
+  );
+});
+
+// Web Push Notifications Support
+// Handle push notification events
+self.addEventListener('push', event => {
+  if (!event.data) {
+    return;
+  }
+
+  let notificationData;
+  try {
+    notificationData = event.data.json();
+  } catch (e) {
+    notificationData = {
+      title: '人脉主页',
+      body: event.data.text(),
+      icon: '/icon.png',
+      badge: '/icon.png'
+    };
+  }
+
+  const title = notificationData.title || '人脉主页';
+  const options = {
+    body: notificationData.body || '您有新的消息',
+    icon: notificationData.icon || '/icon.png',
+    badge: notificationData.badge || '/icon.png',
+    data: notificationData.data || { url: '/' },
+    tag: notificationData.tag || 'default',
+    requireInteraction: notificationData.requireInteraction || false,
+    actions: notificationData.actions || []
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
+});
+
+// Handle notification click events
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+
+  const urlToOpen = event.notification.data?.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then(windowClients => {
+        // Check if there's already a window open
+        for (let client of windowClients) {
+          if (client.url === urlToOpen && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // If not, open a new window
+        if (clients.openWindow) {
+          return clients.openWindow(urlToOpen);
+        }
+      })
+  );
+});
+
+// Handle notification close events (optional)
+self.addEventListener('notificationclose', event => {
+  // Analytics or logging can be added here
+  console.log('Notification closed:', event.notification.tag);
+});
+
+// Handle unregister and cache clear messages
+self.addEventListener('message', event => {
+  if (event.data === 'skipWaiting') {
+    self.skipWaiting();
+  }
+  if (event.data === 'clearCache') {
+    event.waitUntil(
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => caches.delete(cacheName))
+        );
+      })
+    );
+  }
+});
+
+// Background sync support (optional - for offline actions)
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-data') {
+    event.waitUntil(
+      // Implement your sync logic here
+      Promise.resolve()
+    );
+  }
+});

@@ -3,6 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1e3d62">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="turbo-cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="renderer" content="webkit">
@@ -46,6 +51,15 @@
         <%= turbo_stream_from "system_monitor" %>
       </div>
     <% end %>
-    <%= yield(:additional_scripts) if content_for?(:additional_scripts) %>
+    <%= yield(:additional_scripts) if content_for?(:additional_scripts) %><script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(registration => console.log('ServiceWorker registered:', registration.scope))
+        .catch(error => console.error('ServiceWorker registration failed:', error));
+    });
+  }
+</script>
+
   </body>
 </html>
