@@ -9,7 +9,7 @@
     <meta http-equiv="cleartype" content="on">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <% site_name = current_organization&.name || Rails.application.config.x.appname %>
+    <% site_name = Rails.application.config.x.appname %>
     <title>
     <%- if content_for?(:title) %>
       <%= yield(:title) + ' | ' + site_name %>
@@ -32,12 +32,8 @@
         console.log('vConsole loaded - check bottom-right corner for debug panel');
       </script>
     <% end %>
-    <!-- Use organization logo as favicon if available, otherwise use default -->
-    <% if current_organization&.logo&.attached? %>
-      <%= favicon_link_tag url_for(current_organization.logo) unless Rails.env.test? %>
-    <% else %>
-      <%= favicon_link_tag asset_path("logo.png") unless Rails.env.test? %>
-    <% end %>
+    <!-- Use default logo as favicon -->
+    <%= favicon_link_tag asset_path("logo.png") unless Rails.env.test? %>
   </head>
   <body class="flex flex-col min-h-screen text-foreground <%= body_class %>">
     <main class="flex-1 flex flex-col bg-surface">

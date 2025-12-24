@@ -1,7 +1,7 @@
 <div class="container-sm flex items-center justify-center flex-1 py-12">
   <div class="card w-full max-w-2xl">
     <div class="card-body">
-      <h1 class="text-3xl font-bold text-center text-primary mb-2">加入「<%= @organization.name %>」</h1>
+      <h1 class="text-3xl font-bold text-center text-primary mb-2">加入「<%= Rails.application.config.x.appname %>」</h1>
       <p class="text-center text-on-surface-variant mb-8">填写以下信息提交申请，管理员审核通过后您将收到邮件通知并可设置密码完成注册</p>
 
       <%= render 'shared/form_error_message', model: @user %>

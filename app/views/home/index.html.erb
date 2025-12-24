@@ -2,21 +2,14 @@
   <!-- 1. Picture (卖你一个梦) - Why: 人脉主页的核心价值 -->
   <section class="bg-gradient-to-br from-primary via-primary to-primary-dark py-12 sm:py-16 lg:py-32">
     <div class="container-lg mx-auto px-4 sm:px-6 text-center">
-      <!-- 组织 Logo -->
-      <% if @organization&.logo&.attached? %>
-        <div class="mb-6 sm:mb-8">
-          <%= image_tag @organization.logo, alt: @organization.name, class: "h-16 sm:h-20 lg:h-24 w-auto mx-auto brightness-0 invert" %>
-        </div>
-      <% end %>
-
       <!-- 人脉主页标题 -->
       <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight px-2">
-        <%= @organization&.name || '人脉主页' %>
+        人脉主页
       </h1>
       
       <!-- 核心价值主张 -->
       <p class="text-base sm:text-xl lg:text-3xl text-white/95 font-semibold mb-8 sm:mb-12 max-w-4xl mx-auto leading-relaxed px-2">
-        <%= @organization&.description || '基于黄金圈理念，为每位伙伴构建可在微信生态传播的个人品牌页面，让您的专业价值24小时在线传播' %>
+        基于黄金圈理念，为每位伙伴构建可在微信生态传播的个人品牌页面，让您的专业价值24小时在线传播
       </p>
       
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center max-w-xs sm:max-w-none mx-auto px-4">
@@ -50,10 +43,10 @@
               </svg>
             </div>
             <h3 class="text-xl sm:text-2xl font-bold text-primary mb-3 sm:mb-4">
-              <%= @organization&.service_advantage_1_title.presence || '黄金圈理念' %>
+              黄金圈理念
             </h3>
             <p class="text-sm sm:text-base lg:text-lg text-secondary leading-relaxed">
-              <%= @organization&.service_advantage_1_description.presence || '按照Why-How-What逻辑梳理个人品牌，先讲使命愿景，再讲方法论，最后展示成果' %>
+              按照Why-How-What逻辑梳理个人品牌，先讲使命愿景，再讲方法论，最后展示成果
             </p>
           </div>
         </div>
@@ -67,10 +60,10 @@
               </svg>
             </div>
             <h3 class="text-xl sm:text-2xl font-bold text-primary mb-3 sm:mb-4">
-              <%= @organization&.service_advantage_2_title.presence || '微信生态传播' %>
+              微信生态传播
             </h3>
             <p class="text-sm sm:text-base lg:text-lg text-secondary leading-relaxed">
-              <%= @organization&.service_advantage_2_description.presence || '针对微信环境优化，支持分享朋友圈、好友转发，让您的个人品牌随时随地传播' %>
+              针对微信环境优化，支持分享朋友圈、好友转发，让您的个人品牌随时随地传播
             </p>
           </div>
         </div>
@@ -84,10 +77,10 @@
               </svg>
             </div>
             <h3 class="text-xl sm:text-2xl font-bold text-primary mb-3 sm:mb-4">
-              <%= @organization&.service_advantage_3_title.presence || '专业形象展示' %>
+              专业形象展示
             </h3>
             <p class="text-sm sm:text-base lg:text-lg text-secondary leading-relaxed">
-              <%= @organization&.service_advantage_3_description.presence || '一站式展示个人专业能力、成功案例和服务优势，打造令人信赖的个人品牌' %>
+              一站式展示个人专业能力、成功案例和服务优势，打造令人信赖的个人品牌
             </p>
           </div>
         </div>
@@ -101,29 +94,29 @@
             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
               <span class="text-xl sm:text-2xl font-bold text-primary">1</span>
             </div>
-            <h4 class="font-bold text-primary mb-2"><%= @organization&.service_process_1_title.presence || '注册账号' %></h4>
-            <p class="text-sm text-secondary"><%= @organization&.service_process_1_description.presence || '填写基本信息，提交审核申请' %></p>
+            <h4 class="font-bold text-primary mb-2">注册账号</h4>
+            <p class="text-sm text-secondary">填写基本信息，提交审核申请</p>
           </div>
           <div class="text-center">
             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
               <span class="text-xl sm:text-2xl font-bold text-primary">2</span>
             </div>
-            <h4 class="font-bold text-primary mb-2"><%= @organization&.service_process_2_title.presence || '加入社区' %></h4>
-            <p class="text-sm text-secondary"><%= @organization&.service_process_2_description.presence || '添加微信，加入《人脉高手社区》' %></p>
+            <h4 class="font-bold text-primary mb-2">加入社区</h4>
+            <p class="text-sm text-secondary">添加微信，加入《人脉高手社区》</p>
           </div>
           <div class="text-center">
             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
               <span class="text-xl sm:text-2xl font-bold text-primary">3</span>
             </div>
-            <h4 class="font-bold text-primary mb-2"><%= @organization&.service_process_3_title.presence || '完善内容' %></h4>
-            <p class="text-sm text-secondary"><%= @organization&.service_process_3_description.presence || '按黄金圈理念填写页面内容' %></p>
+            <h4 class="font-bold text-primary mb-2">完善内容</h4>
+            <p class="text-sm text-secondary">按黄金圈理念填写页面内容</p>
           </div>
           <div class="text-center">
             <div class="w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
               <span class="text-xl sm:text-2xl font-bold text-primary">4</span>
             </div>
-            <h4 class="font-bold text-primary mb-2"><%= @organization&.service_process_4_title.presence || '分享传播' %></h4>
-            <p class="text-sm text-secondary"><%= @organization&.service_process_4_description.presence || '在微信生态中传播您的品牌' %></p>
+            <h4 class="font-bold text-primary mb-2">分享传播</h4>
+            <p class="text-sm text-secondary">在微信生态中传播您的品牌</p>
           </div>
         </div>
       </div>
@@ -237,10 +230,10 @@
   <section class="py-12 sm:py-16 lg:py-32 bg-gradient-to-br from-primary via-primary to-primary-dark">
     <div class="container-lg mx-auto px-4 sm:px-6 text-center">
       <h2 class="text-2xl sm:text-3xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight px-2">
-        <%= @organization&.cta_title.presence || '立即创建您的人脉主页' %>
+        立即创建您的人脉主页
       </h2>
       <p class="text-base sm:text-lg lg:text-2xl text-white/90 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">
-        <%= @organization&.cta_description.presence || '加入《人脉高手社区》，开始打造可在微信传播的个人品牌页面' %>
+        加入《人脉高手社区》，开始打造可在微信传播的个人品牌页面
       </p>
       
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-6 sm:mb-8 max-w-xs sm:max-w-none mx-auto px-4">
