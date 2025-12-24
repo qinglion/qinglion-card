@@ -141,7 +141,7 @@
                         <div class="flex-1">
                           <h3 class="text-base sm:text-lg font-semibold text-primary mb-1.5 sm:mb-2"><%= title %></h3>
                           <% if desc.present? %>
-                            <p class="text-secondary text-xs sm:text-sm leading-relaxed"><%= desc %></p>
+                            <p class="text-secondary text-xs sm:text-sm leading-relaxed text-justify"><%= desc %></p>
                           <% end %>
                         </div>
                       </div>
@@ -199,7 +199,7 @@
                           <% end %>
                         </div>
                       </div>
-                      <p class="text-secondary text-sm sm:text-base leading-relaxed"><%= case_study.description %></p>
+                      <p class="text-secondary text-sm sm:text-base leading-relaxed text-justify"><%= case_study.description %></p>
                     </div>
                   </li>
                 <% end %>
@@ -226,17 +226,17 @@
                       </div>
                     </div>
                     <div class="flex-1 pt-1">
-                      <div class="flex items-center gap-2 mb-1">
-                        <h4 class="font-semibold text-primary text-sm sm:text-base"><%= honor.title %></h4>
+                      <div class="mb-1">
+                        <h4 class="font-semibold text-primary text-sm sm:text-base mb-0.5"><%= honor.title %></h4>
                         <% if honor.date.present? %>
-                          <span class="text-muted text-xs"><%= honor.date %></span>
+                          <span class="text-muted text-xs whitespace-nowrap"><%= honor.date %></span>
                         <% end %>
                       </div>
                       <% if honor.organization.present? %>
-                        <p class="text-secondary text-xs sm:text-sm mb-1"><%= honor.organization %></p>
+                        <p class="text-secondary text-xs sm:text-sm mb-1 text-justify"><%= honor.organization %></p>
                       <% end %>
                       <% if honor.description.present? %>
-                        <p class="text-secondary text-xs sm:text-sm"><%= honor.description %></p>
+                        <p class="text-secondary text-xs sm:text-sm text-justify"><%= honor.description %></p>
                       <% end %>
                     </div>
                   </li>
@@ -290,7 +290,7 @@
                 </div>
                 
                 <!-- Content -->
-                <p class="text-secondary text-sm sm:text-base leading-relaxed mb-4">
+                <p class="text-secondary text-sm sm:text-base leading-relaxed mb-4 text-justify">
                   <%= testimonial['content'] %>
                 </p>
                 
@@ -331,7 +331,7 @@
             </h2>
             
             <% if @profile.cta_description.present? %>
-              <p class="text-secondary text-lg mb-8 leading-relaxed">
+              <p class="text-secondary text-lg mb-8 leading-relaxed text-justify">
                 <%= @profile.cta_description %>
               </p>
             <% end %>

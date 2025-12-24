@@ -1,20 +1,22 @@
-<div class="min-h-screen flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
-    <div class="text-center">
-      <h1 class="text-3xl font-bold text-primary mb-2">登录</h1>
-      <p class="text-secondary">欢迎回来</p>
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <%= render 'sessions/login_form_with_oauth' %>
+<div class="min-h-screen flex flex-col">
+  <div class="flex-1 flex items-center justify-center bg-surface py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-primary mb-2">登录</h1>
+        <p class="text-secondary">欢迎回来</p>
       </div>
-    </div>
 
-    <div class="text-center">
-      <p class="text-sm text-secondary">
-        还没有账户？<%= link_to "立即注册", sign_up_path, class: "text-primary hover:underline" %>
-      </p>
+      <div class="card">
+        <div class="card-body">
+          <%= render 'sessions/login_form_with_oauth' %>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <p class="text-sm text-secondary">
+          还没有账户？<%= link_to "立即注册", sign_up_path, class: "text-primary hover:underline" %>
+        </p>
+      </div>
     </div>
   </div>
 
