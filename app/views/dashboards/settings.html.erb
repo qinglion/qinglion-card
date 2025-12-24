@@ -145,28 +145,122 @@
 
 
           <!-- Case Studies -->
-          <div class="space-y-3 md:space-y-4">
+          <div id="case-studies-container" class="space-y-3 md:space-y-4">
             <h2 class="text-lg md:text-xl font-semibold text-primary border-b border-border pb-2">成功案例</h2>
-            <p class="text-xs md:text-sm text-secondary">介绍您的成功案例，每行一个案例，未填写则不显示</p>
+            <p class="text-xs md:text-sm text-secondary">展示您的专业成功案例，未填写则不显示</p>
             
-            <div class="p-3 md:p-4 bg-surface-elevated rounded-lg">
-              <%= form.label :case_studies_text, '案例列表', class: "form-label" %>
-              <%= form.text_area :case_studies_text, rows: 5, class: "form-input", placeholder: "每行一个案例，例如：\n帮助某科技公司完成品牌升级，业绩增长300%\n为某创业团队设计产品原型，成功融资500万\n协助某企业优化流程，降低成本40%" %>
-            </div>
+            <% 
+              # Prepare case studies array with at least 3 items for new profiles
+              case_studies_array = @profile.case_studies.to_a
+              while case_studies_array.size < 3
+                case_studies_array << @profile.case_studies.build
+              end
+            %>
+            
+            <%= form.fields_for :case_studies, case_studies_array do |case_form| %>
+              <div class="p-3 md:p-4 bg-surface-elevated rounded-lg case-study-item">
+                <div class="flex justify-between items-center mb-2 md:mb-3">
+                  <h3 class="text-sm font-semibold text-primary">案例 <%= case_form.index + 1 %></h3>
+                  <% if case_form.object.persisted? %>
+                    <button type="button" 
+                            onclick="removeCaseStudy(this)"
+                            class="text-error hover:text-error-dark text-xs">
+                      删除
+                    </button>
+                    <%= case_form.hidden_field :_destroy, class: 'destroy-flag' %>
+                  <% end %>
+                </div>
+                <div class="space-y-2 md:space-y-3">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+                    <div>
+                      <%= case_form.label :title, '案例标题', class: "form-label" %>
+                      <%= case_form.text_field :title, class: "form-input", placeholder: "例如：某科技公司股权转让纠纷案" %>
+                    </div>
+                    <div>
+                      <%= case_form.label :category, '案件分类', class: "form-label" %>
+                      <%= case_form.text_field :category, class: "form-input", placeholder: "例如：股权争议、并购重组" %>
+                    </div>
+                  </div>
+                  <div>
+                    <%= case_form.label :date, '案件日期', class: "form-label" %>
+                    <%= case_form.text_field :date, class: "form-input", placeholder: "例如：2023年6月" %>
+                  </div>
+                  <div>
+                    <%= case_form.label :description, '案例描述', class: "form-label" %>
+                    <%= case_form.text_area :description, rows: 3, class: "form-input", placeholder: "详细描述案件背景、处理过程和结果，例如：成功代理某科技公司股东回股权转让纠纷，涉案金额3500万元..." %>
+                  </div>
+                  <%= case_form.hidden_field :position %>
+                </div>
+              </div>
+            <% end %>
+            
+            <button type="button" 
+                    onclick="addCaseStudy()"
+                    class="btn-outline-sm w-full">
+              <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              </svg>
+              添加更多案例
+            </button>
           </div>
 
           <!-- Honors -->
-          <div class="space-y-3 md:space-y-4">
+          <div id="honors-container" class="space-y-3 md:space-y-4">
             <h2 class="text-lg md:text-xl font-semibold text-primary border-b border-border pb-2">荣誉认证</h2>
-            <p class="text-xs md:text-sm text-secondary">列出您的荣誉和认证，每行一个，未填写则不显示</p>
+            <p class="text-xs md:text-sm text-secondary">展示您的荣誉和认证，未填写则不显示</p>
             
-            <div class="p-3 md:p-4 bg-surface-elevated rounded-lg">
-              <%= form.label :honors_text, '荣誉列表', class: "form-label" %>
-              <%= form.text_area :honors_text, rows: 5, class: "form-input", placeholder: "国家一级设计师认证
-2023年度最佳创新奖
-PMP项目管理专业认证
-清华大学工商管理硕士" %>
-            </div>
+            <% 
+              # Prepare honors array with at least 3 items for new profiles
+              honors_array = @profile.honors.to_a
+              while honors_array.size < 3
+                honors_array << @profile.honors.build
+              end
+            %>
+            
+            <%= form.fields_for :honors, honors_array do |honor_form| %>
+              <div class="p-3 md:p-4 bg-surface-elevated rounded-lg honor-item">
+                <div class="flex justify-between items-center mb-2 md:mb-3">
+                  <h3 class="text-sm font-semibold text-primary">荣誉 <%= honor_form.index + 1 %></h3>
+                  <% if honor_form.object.persisted? %>
+                    <button type="button" 
+                            onclick="removeHonor(this)"
+                            class="text-error hover:text-error-dark text-xs">
+                      删除
+                    </button>
+                    <%= honor_form.hidden_field :_destroy, class: 'destroy-flag' %>
+                  <% end %>
+                </div>
+                <div class="space-y-2 md:space-y-3">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+                    <div>
+                      <%= honor_form.label :title, '荣誉标题', class: "form-label" %>
+                      <%= honor_form.text_field :title, class: "form-input", placeholder: "例如：2023年度最佳律师" %>
+                    </div>
+                    <div>
+                      <%= honor_form.label :organization, '颁发机构', class: "form-label" %>
+                      <%= honor_form.text_field :organization, class: "form-input", placeholder: "例如：中国律师协会" %>
+                    </div>
+                  </div>
+                  <div>
+                    <%= honor_form.label :date, '获得日期', class: "form-label" %>
+                    <%= honor_form.text_field :date, class: "form-input", placeholder: "例如：2023年" %>
+                  </div>
+                  <div>
+                    <%= honor_form.label :description, '详细描述', class: "form-label" %>
+                    <%= honor_form.text_area :description, rows: 2, class: "form-input", placeholder: "详细描述荣誉的背景和意义（可选）" %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+            
+            <button type="button" 
+                    onclick="addHonor()"
+                    class="btn-outline-sm w-full">
+              <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              </svg>
+              添加更多荣誉
+            </button>
           </div>
 
           <!-- Service Process -->
@@ -208,16 +302,20 @@ PMP项目管理专业认证
           </div>
 
           <!-- Testimonials -->
-          <div class="space-y-3 md:space-y-4">
+          <div id="testimonials-container" class="space-y-3 md:space-y-4">
             <h2 class="text-lg md:text-xl font-semibold text-primary border-b border-border pb-2">客户评价</h2>
             <p class="text-xs md:text-sm text-secondary">展示客户的真实评价，增强信任感，未填写则不显示</p>
             
             <% 
               # Ensure testimonials is a valid array of hashes
-              testimonials_array = @profile.testimonials
+              testimonials_data = @profile.testimonials || {}
               
-              # Handle edge cases: nil, string, or invalid data
-              unless testimonials_array.is_a?(Array)
+              # Convert Hash to Array if needed (Rails sometimes stores as Hash with numeric string keys)
+              if testimonials_data.is_a?(Hash)
+                testimonials_array = testimonials_data.values
+              elsif testimonials_data.is_a?(Array)
+                testimonials_array = testimonials_data
+              else
                 testimonials_array = []
               end
               
@@ -302,6 +400,9 @@ PMP项目管理专业认证
       </div>
     </div>
   </div>
+
+  <!-- Builder Attribution -->
+  <%= render 'shared/footer_attribution' %>
   
   <!-- Fixed Bottom Actions Bar -->
   <div class="fixed bottom-0 left-0 right-0 bg-surface border-t border-border shadow-lg z-50">
@@ -329,9 +430,134 @@ PMP项目管理专业认证
     }
   });
   
+  // Add new case study function
+  function addCaseStudy() {
+    const container = document.getElementById('case-studies-container');
+    if (!container) return;
+    
+    const existingItems = container.querySelectorAll('.case-study-item');
+    const newIndex = existingItems.length;
+    const timestamp = new Date().getTime();
+    
+    const addButton = container.querySelector('button[onclick="addCaseStudy()"]');
+    
+    const newItemHTML = `
+      <div class="p-3 md:p-4 bg-surface-elevated rounded-lg case-study-item">
+        <div class="flex justify-between items-center mb-2 md:mb-3">
+          <h3 class="text-sm font-semibold text-primary">案例 ${newIndex + 1}</h3>
+          <button type="button" 
+                  onclick="removeCaseStudy(this)"
+                  class="text-error hover:text-error-dark text-xs">
+            删除
+          </button>
+        </div>
+        <div class="space-y-2 md:space-y-3">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+            <div>
+              <label class="form-label">案例标题</label>
+              <input type="text" name="profile[case_studies_attributes][${timestamp}][title]" class="form-input" placeholder="例如：某科技公司股权转让纠纷案">
+            </div>
+            <div>
+              <label class="form-label">案件分类</label>
+              <input type="text" name="profile[case_studies_attributes][${timestamp}][category]" class="form-input" placeholder="例如：股权争议、并购重组">
+            </div>
+          </div>
+          <div>
+            <label class="form-label">案件日期</label>
+            <input type="text" name="profile[case_studies_attributes][${timestamp}][date]" class="form-input" placeholder="例如：2023年6月">
+          </div>
+          <div>
+            <label class="form-label">案例描述</label>
+            <textarea name="profile[case_studies_attributes][${timestamp}][description]" rows="3" class="form-input" placeholder="详细描述案件背景、处理过程和结果，例如：成功代理某科技公司股东回股权转让纠纷，涉案金额3500万元..."></textarea>
+          </div>
+          <input type="hidden" name="profile[case_studies_attributes][${timestamp}][position]" value="${newIndex}">
+        </div>
+      </div>
+    `;
+    
+    addButton.insertAdjacentHTML('beforebegin', newItemHTML);
+  }
+  
+  // Remove case study function
+  function removeCaseStudy(button) {
+    const item = button.closest('.case-study-item');
+    const destroyFlag = item.querySelector('.destroy-flag');
+    
+    if (destroyFlag) {
+      // For persisted records, set _destroy flag
+      destroyFlag.value = '1';
+      item.style.display = 'none';
+    } else {
+      // For new records, just remove the element
+      item.remove();
+    }
+  }
+  
+  // Add new honor function
+  function addHonor() {
+    const container = document.getElementById('honors-container');
+    if (!container) return;
+    
+    const existingItems = container.querySelectorAll('.honor-item');
+    const newIndex = existingItems.length;
+    const timestamp = new Date().getTime();
+    
+    const addButton = container.querySelector('button[onclick="addHonor()"]');
+    
+    const newItemHTML = `
+      <div class="p-3 md:p-4 bg-surface-elevated rounded-lg honor-item">
+        <div class="flex justify-between items-center mb-2 md:mb-3">
+          <h3 class="text-sm font-semibold text-primary">荣誉 ${newIndex + 1}</h3>
+          <button type="button" 
+                  onclick="removeHonor(this)"
+                  class="text-error hover:text-error-dark text-xs">
+            删除
+          </button>
+        </div>
+        <div class="space-y-2 md:space-y-3">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
+            <div>
+              <label class="form-label">荣誉标题</label>
+              <input type="text" name="profile[honors_attributes][${timestamp}][title]" class="form-input" placeholder="例如：2023年度最佳律师">
+            </div>
+            <div>
+              <label class="form-label">颁发机构</label>
+              <input type="text" name="profile[honors_attributes][${timestamp}][organization]" class="form-input" placeholder="例如：中国律师协会">
+            </div>
+          </div>
+          <div>
+            <label class="form-label">获得日期</label>
+            <input type="text" name="profile[honors_attributes][${timestamp}][date]" class="form-input" placeholder="例如：2023年">
+          </div>
+          <div>
+            <label class="form-label">详细描述</label>
+            <textarea name="profile[honors_attributes][${timestamp}][description]" rows="2" class="form-input" placeholder="详细描述荣誉的背景和意义（可选）"></textarea>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    addButton.insertAdjacentHTML('beforebegin', newItemHTML);
+  }
+  
+  // Remove honor function
+  function removeHonor(button) {
+    const item = button.closest('.honor-item');
+    const destroyFlag = item.querySelector('.destroy-flag');
+    
+    if (destroyFlag) {
+      // For persisted records, set _destroy flag
+      destroyFlag.value = '1';
+      item.style.display = 'none';
+    } else {
+      // For new records, just remove the element
+      item.remove();
+    }
+  }
+  
   // Add new testimonial function
   function addTestimonial() {
-    const testimonialsContainer = document.querySelector('.space-y-3.md\\:space-y-4:has(h2:contains("客户评价"))');
+    const testimonialsContainer = document.getElementById('testimonials-container');
     if (!testimonialsContainer) return;
     
     const existingTestimonials = testimonialsContainer.querySelectorAll('.bg-surface-elevated.rounded-lg');

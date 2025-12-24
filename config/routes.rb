@@ -123,6 +123,8 @@ Rails.application.routes.draw do
     end
     resources :honors
     resources :case_studies
+    resources :member_categories, only: [:index, :update]
+    resources :renewals
     resources :profiles do
       post :regenerate_specializations, on: :member
     end

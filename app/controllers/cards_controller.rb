@@ -5,9 +5,9 @@ class CardsController < ApplicationController
     @full_render = true  # Hide navbar for card view
     @profile = Profile.friendly.find(params[:id])
     
-    # Parse text fields into arrays
-    @case_studies = parse_text_to_list(@profile.case_studies_text)
-    @honors = parse_text_to_list(@profile.honors_text)
+    # Load associated case studies and honors from database
+    @case_studies = @profile.case_studies.order(:position)
+    @honors = @profile.honors.order(:created_at)
     
     # Track the share source profile (for WeChat share scenario)
     @source_profile_id = params[:profile_id]

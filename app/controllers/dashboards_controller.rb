@@ -79,7 +79,9 @@ class DashboardsController < ApplicationController
       :service_process_4_title, :service_process_4_description,
       :cta_title, :cta_description, :cta_qrcode,
       stats: [:years_experience, :cases_handled, :clients_served, :success_rate],
-      testimonials: [:name, :title, :content, :rating]
+      testimonials: {},
+      case_studies_attributes: [:id, :title, :category, :date, :description, :position, :_destroy],
+      honors_attributes: [:id, :title, :organization, :date, :description, :_destroy]
     )
   end
   

@@ -50,5 +50,6 @@
         <%= turbo_stream_from "system_monitor" %>
       </div>
     <% end %>
+    <%= yield(:additional_scripts) if content_for?(:additional_scripts) %>
   </body>
 </html>

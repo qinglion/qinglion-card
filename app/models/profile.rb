@@ -31,6 +31,10 @@ class Profile < ApplicationRecord
   has_many :chat_messages, through: :chat_sessions
   has_many :renewals, dependent: :destroy
   
+  # Accept nested attributes for case studies and honors
+  accepts_nested_attributes_for :case_studies, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :honors, allow_destroy: true, reject_if: :all_blank
+  
   has_one_attached :avatar
   has_one_attached :background_image
   has_one_attached :cta_qrcode
