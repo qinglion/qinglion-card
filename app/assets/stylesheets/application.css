@@ -137,6 +137,12 @@
 
   /* CUSTOM COMPONENTS - Add project-specific styles here */
   
+  /* Bio text content - remove p tag margins */
+  .bio-content p {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
   /* Professional avatar container */
   .avatar {
     @apply relative inline-flex items-center justify-center overflow-hidden rounded-full bg-surface-elevated border-2 border-border;
